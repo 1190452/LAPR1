@@ -24,6 +24,7 @@ public class ProjetoV1 {
         double mgs = mediaGlobal(dadosFicheiro, linhas);
         definirIntervalos(mgs, dadosFicheiro);
         ordenarValores(dadosFicheiro, linhas);
+        //MediaMovelSimples(dadosFicheiro, linhas);
 
     }
 
@@ -165,9 +166,9 @@ public class ProjetoV1 {
 
     public static void analisarPeriodo(int[][] dadosFicheiro, int lowerLimit, int upperLimit, int linhas) {
         int p=0;
-        int soma=dadosFicheiro[0][4];
+        int soma=0;
         int [] energiasP = new int [22700];
-        for (int posicao = 1; posicao < linhas; posicao++) {
+        for (int posicao = 0; posicao < linhas; posicao++) {
            if (dadosFicheiro[posicao][3] >= lowerLimit && dadosFicheiro[posicao][3] <= upperLimit && dadosFicheiro[posicao][2] == dadosFicheiro[posicao+1][2] && dadosFicheiro[posicao+1][4]!=0) {       
                soma= soma + dadosFicheiro[posicao][4];
             }
