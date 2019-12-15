@@ -51,68 +51,54 @@ public class ProjetoV1 {
         Scanner ler = new Scanner(System.in);
         System.out.println("Introduza a resolução temporal: ");
         String time = ler.nextLine();
-        int[] energiasD;
-        int[] energiasM;
-        int[] energiasA;
-        int[] energiasMadrugada;
-        int[] energiasManha;
-        int[] energiasTarde;
-        int[] energiasNoite;
         switch (time.toLowerCase()) {
             case "diario":
-                energiasD=analisarDia(dadosFicheiro, linhas);
-                if(energiasD != null){
+                int[] energiasD;
+                energiasD = analisarDia(dadosFicheiro, linhas);
                     ordenarValores(energiasD, linhas);
-                }
                 break;
             case "mensal":
+                int[] energiasM;
                 energiasM = analisarMes(dadosFicheiro, linhas);
-                if(energiasM!=null){
                     ordenarValores(energiasM, linhas);
-                }
                 break;
             case "anual":
+                int[] energiasA;
                 energiasA=analisarAno(dadosFicheiro, linhas);
-                if(energiasA!=null){
                     ordenarValores(energiasA, linhas);
-                }
                 break;
             case "periodo do dia":
+                int[] energiasMadrugada;
                 System.out.println("Introduza o periodo do dia que pretende analisar!");
                 String periodo = ler.nextLine();
                 int lowerLimit,  upperLimit;
                 switch (periodo.toLowerCase()) {
                     case "madrugada":
+                        int[] energiasManha;
                         lowerLimit = 00;
                         upperLimit = 05;  
                         energiasMadrugada=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
-                        if(energiasMadrugada!=null){
                             ordenarValores(energiasMadrugada,linhas);
-                        }
                         break;
                     case "manha":
                         lowerLimit = 06;
                         upperLimit = 11;
                         energiasManha=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
-                        if(energiasManha!=null){
                             ordenarValores(energiasManha,linhas);
-                        }
                         break;
                     case "tarde":
+                        int[] energiasTarde;
                         lowerLimit = 12;
                         upperLimit = 17;
                         energiasTarde=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
-                        if(energiasTarde!=null){
                             ordenarValores(energiasTarde,linhas);
-                        }
                         break;
                     case "noite":
+                        int[] energiasNoite;
                         lowerLimit = 18;
                         upperLimit = 23;
                         energiasNoite=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
-                        if(energiasNoite!=null){
                             ordenarValores(energiasNoite,linhas);
-                        }
                         break;
                 }
         }
