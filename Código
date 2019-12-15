@@ -13,12 +13,11 @@ public class ProjetoLAPR {
 
     public static void main(String[] args) throws FileNotFoundException {
         int[][] dadosFicheiro = new int[22681][5];
-
         int linhas = guardarDados(dadosFicheiro);
         analisarDados(dadosFicheiro, linhas);
         double mgs = mediaGlobal(dadosFicheiro, linhas);
         definirIntervalos(mgs, dadosFicheiro);
-        EscolhaMedia(dadosFicheiro,linhas);
+        EscolhaMedia(dadosFicheiro, linhas);
     }
 
     public static int guardarDados(int[][] dadosFicheiro) throws FileNotFoundException {
@@ -215,7 +214,7 @@ public class ProjetoLAPR {
     }
 
     public static void numeroObservacoes(int[][] dadosFicheiro, double mediaInferior, double mediaSuperior) {
-        int contadorInf = 0, contadorSup = 0, contadorMeio = 0;
+        int contadorInf = 0, contadorSup = 0, contadorMeio = 0, contador;
         for (int posicao = 0; posicao < dadosFicheiro.length; posicao++) {
             if (dadosFicheiro[posicao][4] < mediaInferior) {
                 contadorInf++;
@@ -367,7 +366,7 @@ public class ProjetoLAPR {
         }
     }
 
-    public static void mediaPesada(int[][] dadosFicheiro, int linhas) {
+    public static double[] mediaPesada(int[][] dadosFicheiro, int linhas) {
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de α (]0,1[)");
         double mmep[] = new double[linhas];
@@ -383,9 +382,10 @@ public class ProjetoLAPR {
             }
             x++;
         }
+        return mmep;
     }
 
-    public static void MediaMovelSimples(int[][] dadosFicheiro, int linhas) {
+    public static double[] MediaMovelSimples(int[][] dadosFicheiro, int linhas) {
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de n");
         int n = ordem.nextInt();
@@ -397,8 +397,9 @@ public class ProjetoLAPR {
             }
             mms[i] = soma / n;
             soma = 0;
-            System.out.printf("%.1f\n",mms[i]);
+
         }
+        return mms;
     }
 
     public static void EscolhaMedia(int[][] dadosFicheiro, int linhas) {
@@ -406,15 +407,30 @@ public class ProjetoLAPR {
         Scanner ler = new Scanner(System.in);
         System.out.println("Introduza o tipo de média a utilizar (Média Móvel Simples |OU| Média Móvel Exponencialmente Pesada): ");
         String media = ler.nextLine();
+        double[] mms;
+        double[] mmep;
         switch (media.toLowerCase()) {
             case "media movel simples":
-                MediaMovelSimples(dadosFicheiro, linhas);
+                mms = MediaMovelSimples(dadosFicheiro, linhas);
+                ErroMediaAbsoluto(dadosFicheiro, linhas,  mms);
+              
                 break;
             case "media movel exponencialmente pesada":
-                mediaPesada(dadosFicheiro, linhas);
+                mmep = mediaPesada(dadosFicheiro, linhas);
+                ErroMediaAbsoluto(dadosFicheiro, linhas,  mmep);
                 break;
             default:
                 break;
         }
+    }
+
+    public static void ErroMediaAbsoluto(int[][] dadosFicheiro, int linhas, double[] media) {
+        double erro=0, error;
+        System.out.println("ERRO");
+        for (int x = 0; x < linhas - 1; x++) {
+            erro = Math.abs(dadosFicheiro[x][4] - media[x]);
+        }
+        error=erro/linhas;
+        System.out.println(error);
     }
 }
