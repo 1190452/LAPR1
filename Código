@@ -18,8 +18,7 @@ public class ProjetoLAPR {
         analisarDados(dadosFicheiro, linhas);
         double mgs = mediaGlobal(dadosFicheiro, linhas);
         definirIntervalos(mgs, dadosFicheiro);
-        MediaMovelSimples(dadosFicheiro, linhas);
-
+        EscolhaMedia(dadosFicheiro,linhas);
     }
 
     public static int guardarDados(int[][] dadosFicheiro) throws FileNotFoundException {
@@ -49,152 +48,154 @@ public class ProjetoLAPR {
             case "diario":
                 int[] energiasD;
                 energiasD = analisarDia(dadosFicheiro, linhas);
-                    ordenarValores(energiasD, linhas);
+                ordenarValores(energiasD, linhas);
                 break;
             case "mensal":
                 int[] energiasM;
                 energiasM = analisarMes(dadosFicheiro, linhas);
-                    ordenarValores(energiasM, linhas);
+                ordenarValores(energiasM, linhas);
                 break;
             case "anual":
                 int[] energiasA;
-                energiasA=analisarAno(dadosFicheiro, linhas);
-                    ordenarValores(energiasA, linhas);
+                energiasA = analisarAno(dadosFicheiro, linhas);
+                ordenarValores(energiasA, linhas);
                 break;
             case "periodo do dia":
                 int[] energiasMadrugada;
                 System.out.println("Introduza o periodo do dia que pretende analisar!");
                 String periodo = ler.nextLine();
-                int lowerLimit,  upperLimit;
+                int lowerLimit,
+                 upperLimit;
                 switch (periodo.toLowerCase()) {
                     case "madrugada":
                         int[] energiasManha;
                         lowerLimit = 00;
-                        upperLimit = 05;  
-                        energiasMadrugada=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
-                            ordenarValores(energiasMadrugada,linhas);
+                        upperLimit = 05;
+                        energiasMadrugada = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        ordenarValores(energiasMadrugada, linhas);
                         break;
                     case "manha":
                         lowerLimit = 06;
                         upperLimit = 11;
-                        energiasManha=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
-                            ordenarValores(energiasManha,linhas);
+                        energiasManha = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        ordenarValores(energiasManha, linhas);
                         break;
                     case "tarde":
                         int[] energiasTarde;
                         lowerLimit = 12;
                         upperLimit = 17;
-                        energiasTarde=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
-                            ordenarValores(energiasTarde,linhas);
+                        energiasTarde = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        ordenarValores(energiasTarde, linhas);
                         break;
                     case "noite":
                         int[] energiasNoite;
                         lowerLimit = 18;
                         upperLimit = 23;
-                        energiasNoite=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
-                            ordenarValores(energiasNoite,linhas);
+                        energiasNoite = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        ordenarValores(energiasNoite, linhas);
                         break;
                 }
         }
     }
-    public static int[] analisarDia(int[][] dadosFicheiro, int linhas) { 
-        int p=0;
+
+    public static int[] analisarDia(int[][] dadosFicheiro, int linhas) {
+        int p = 0;
         int soma = dadosFicheiro[0][4];
-        int [] energiasD = new int [linhas];
-        for(int posicao=0; posicao<linhas; posicao++){
-           if(dadosFicheiro[posicao][2] == dadosFicheiro[posicao+1][2] && dadosFicheiro[posicao+1][4]!=0){
-               soma = soma + dadosFicheiro[posicao+1][4];              
-           } else {
-               energiasD[p]=soma;
-               soma = dadosFicheiro[posicao+1][4];
-               p++;
-           }  
-           
+        int[] energiasD = new int[linhas];
+        for (int posicao = 0; posicao < linhas; posicao++) {
+            if (dadosFicheiro[posicao][2] == dadosFicheiro[posicao + 1][2] && dadosFicheiro[posicao + 1][4] != 0) {
+                soma = soma + dadosFicheiro[posicao + 1][4];
+            } else {
+                energiasD[p] = soma;
+                soma = dadosFicheiro[posicao + 1][4];
+                p++;
+            }
+
+        }
+        int x = 0;
+        while (energiasD[x] != 0) {
+            System.out.println(energiasD[x]);
+            x++;
+        }
+        //  visualizarGraf(energiasD);
+        return energiasD;
     }
-        int x=0;
-        while (energiasD[x] !=0){
-               System.out.println(energiasD[x]);
-               x++;
-           }
-      //  visualizarGraf(energiasD);
-      return energiasD;
-    }
+
     /*public static void visualizarGraf(int [] energiasD){
         
     }*/
-
-    public static int[] analisarMes(int[][] dadosFicheiro, int linhas) {   
-        int p=0;
+    public static int[] analisarMes(int[][] dadosFicheiro, int linhas) {
+        int p = 0;
         int soma = dadosFicheiro[0][4];
-        int [] energiasM = new int [linhas];
-        for(int posicao=0; posicao<linhas; posicao++){
-           if(dadosFicheiro[posicao][1] == dadosFicheiro[posicao+1][1] && dadosFicheiro[posicao+1][1]!=0){
-               soma = soma + dadosFicheiro[posicao+1][4];
-           } else {
-               energiasM[p]=soma;
-               soma = dadosFicheiro[posicao+1][4];
-               p++;
-           }   
-    }
-        int x=0;
-        while (energiasM[x] !=0){
-               System.out.println(energiasM[x]);
-               x++;
-           }
+        int[] energiasM = new int[linhas];
+        for (int posicao = 0; posicao < linhas; posicao++) {
+            if (dadosFicheiro[posicao][1] == dadosFicheiro[posicao + 1][1] && dadosFicheiro[posicao + 1][1] != 0) {
+                soma = soma + dadosFicheiro[posicao + 1][4];
+            } else {
+                energiasM[p] = soma;
+                soma = dadosFicheiro[posicao + 1][4];
+                p++;
+            }
+        }
+        int x = 0;
+        while (energiasM[x] != 0) {
+            System.out.println(energiasM[x]);
+            x++;
+        }
         return energiasM;
-      //  verGrafico(energiasM);
-        
+        //  verGrafico(energiasM);
+
     }
-   /* public static void verGrafico(int [] energiasM){
+
+    /* public static void verGrafico(int [] energiasM){
         
     }*/
     public static int[] analisarAno(int[][] dadosFicheiro, int linhas) {
-        int p=0;
+        int p = 0;
         int soma = dadosFicheiro[0][4];
-        int [] energiasA = new int [linhas];
-        for(int posicao=0; posicao<linhas; posicao++){
-           if(dadosFicheiro[posicao][0] == dadosFicheiro[posicao+1][0]){
-               soma = soma + dadosFicheiro[posicao+1][4];
-           } else {
-               energiasA[p]=soma;
-               soma = dadosFicheiro[posicao+1][4];
-               p++;
-           }   
-    }
-        int x=0;
-        while (energiasA[x] !=0){
-               System.out.println(energiasA[x]);
-               x++;
-           }
+        int[] energiasA = new int[linhas];
+        for (int posicao = 0; posicao < linhas; posicao++) {
+            if (dadosFicheiro[posicao][0] == dadosFicheiro[posicao + 1][0]) {
+                soma = soma + dadosFicheiro[posicao + 1][4];
+            } else {
+                energiasA[p] = soma;
+                soma = dadosFicheiro[posicao + 1][4];
+                p++;
+            }
+        }
+        int x = 0;
+        while (energiasA[x] != 0) {
+            System.out.println(energiasA[x]);
+            x++;
+        }
         return energiasA;
-       // mostrarGraf(energiasA);
+        // mostrarGraf(energiasA);
     }
-   /* public static void mostrarGraf (int [] energiasA){
+
+    /* public static void mostrarGraf (int [] energiasA){
         
     }*/
-
     public static int[] analisarPeriodo(int[][] dadosFicheiro, int lowerLimit, int upperLimit, int linhas) {
-        int p=0;
-        int soma=0;
-        int [] energiasP = new int [linhas];
+        int p = 0;
+        int soma = 0;
+        int[] energiasP = new int[linhas];
         for (int posicao = 0; posicao < linhas; posicao++) {
-           if (dadosFicheiro[posicao][3] >= lowerLimit && dadosFicheiro[posicao][3] <= upperLimit && dadosFicheiro[posicao][2] == dadosFicheiro[posicao+1][2] && dadosFicheiro[posicao+1][4]!=0) {       
-               soma= soma + dadosFicheiro[posicao][4];
+            if (dadosFicheiro[posicao][3] >= lowerLimit && dadosFicheiro[posicao][3] <= upperLimit && dadosFicheiro[posicao][2] == dadosFicheiro[posicao + 1][2] && dadosFicheiro[posicao + 1][4] != 0) {
+                soma = soma + dadosFicheiro[posicao][4];
+            } else {
+                if (soma != 0) {
+                    energiasP[p] = soma;
+                    p++;
+                    soma = 0;
+                }
             }
-           else{
-               if (soma!=0){
-                energiasP[p]= soma;
-                p++;
-                soma=0;
-               }
-           } 
         }
-        int x=0;
-            while (energiasP[x] !=0){
-               System.out.println(energiasP[x]);
-               x++;
-           }
-            return energiasP;
+        int x = 0;
+        while (energiasP[x] != 0) {
+            System.out.println(energiasP[x]);
+            x++;
+        }
+        return energiasP;
     }
 
     public static double mediaGlobal(int[][] dadosFicheiro, int linhas) {
@@ -277,13 +278,14 @@ public class ProjetoLAPR {
             }
 
             for (int z = 0; z < linhas; z++) {
-                if(energia[z]!=0){
-                System.out.println(energia[z]);
+                if (energia[z] != 0) {
+                    System.out.println(energia[z]);
                 }
 
             }
         }
     }
+
     public static void merge(int[] energias, int start, int mid, int end) {
         int temp[] = new int[end - start + 1];
         int i = start, j = mid + 1, k = 0;
@@ -311,8 +313,7 @@ public class ProjetoLAPR {
         for (i = start; i <= end; i += 1) {
             energias[i] = temp[i - start];
         }
-         
-        
+
     }
 
     public static void mergeSortCrescente(int[] energias, int start, int end) {
@@ -323,9 +324,9 @@ public class ProjetoLAPR {
             mergeSortCrescente(energias, mid + 1, end);
             merge(energias, start, mid, end);
         }
-      
+
     }
-    
+
     public static void mergeDecrescente(int[] energias, int start, int mid, int end) {
         int temp[] = new int[end - start + 1];
         int i = start, j = mid + 1, k = 0;
@@ -353,7 +354,7 @@ public class ProjetoLAPR {
         for (i = start; i <= end; i += 1) {
             energias[i] = temp[i - start];
         }
-        
+
     }
 
     public static void mergeSortDecrescente(int[] energias, int start, int end) {
@@ -366,39 +367,54 @@ public class ProjetoLAPR {
         }
     }
 
-
     public static void mediaPesada(int[][] dadosFicheiro, int linhas) {
-        System.out.println("Suavização/Filtragem da série ");
         Scanner ordem = new Scanner(System.in);
-        System.out.println("Introduza o valor de α");
+        System.out.println("Introduza o valor de α (]0,1[)");
         double mmep[] = new double[linhas];
-        int x = 1;
+        int x = 0;
         double a;
-        a = ordem.nextDouble();
         do {
             a = ordem.nextDouble();
         } while (a <= 0 || a >= 1);
         for (int i = 0; i < linhas; i++) {
-            mmep[x] = a * dadosFicheiro[i][4] + (1 - a) * mmep[x - 1];
-            System.out.printf("%.1f\n", mmep[x]);
+            if ((x - 1) >= 0) {
+                mmep[x] = a * dadosFicheiro[i][4] + (1 - a) * mmep[x - 1];
+                System.out.printf("%.1f\n", mmep[x]);
+            }
             x++;
         }
     }
+
     public static void MediaMovelSimples(int[][] dadosFicheiro, int linhas) {
-        System.out.println("Suavização/Filtragem da série orginal");
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de n");
         int n = ordem.nextInt();
         double[] mms = new double[linhas];
-        double soma=0;
-                for (int i = 0; i < linhas; i++) {
-                    for (int k = 0; k < n  && i >= k; k++) {
-                        soma += (dadosFicheiro[i - k][4]);
-                    }
-                    mms[i] = soma / n;
-                    soma=0;
-                    System.out.println(mms[i]);
-                }
+        double soma = 0;
+        for (int i = 0; i < linhas; i++) {
+            for (int k = 0; k < n && i >= k; k++) {
+                soma += (dadosFicheiro[i - k][4]);
+            }
+            mms[i] = soma / n;
+            soma = 0;
+            System.out.printf("%.1f\n",mms[i]);
+        }
+    }
+
+    public static void EscolhaMedia(int[][] dadosFicheiro, int linhas) {
+        System.out.println("Suavização/Filtragem da série orginal");
+        Scanner ler = new Scanner(System.in);
+        System.out.println("Introduza o tipo de média a utilizar (Média Móvel Simples |OU| Média Móvel Exponencialmente Pesada): ");
+        String media = ler.nextLine();
+        switch (media.toLowerCase()) {
+            case "media movel simples":
+                MediaMovelSimples(dadosFicheiro, linhas);
+                break;
+            case "media movel exponencialmente pesada":
+                mediaPesada(dadosFicheiro, linhas);
+                break;
+            default:
+                break;
+        }
     }
 }
-
