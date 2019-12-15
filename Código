@@ -1,9 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package projetov1;
+package lapr;
 
 import java.io.FileNotFoundException;
 import java.io.File;
@@ -14,7 +9,7 @@ import com.panayotis.gnuplot.style.NamedPlotColor;
 import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
 
-public class ProjetoV1 {
+public class ProjetoLAPR {
 
     public static void main(String[] args) throws FileNotFoundException {
         int[][] dadosFicheiro = new int[22681][5];
@@ -23,8 +18,7 @@ public class ProjetoV1 {
         analisarDados(dadosFicheiro, linhas);
         double mgs = mediaGlobal(dadosFicheiro, linhas);
         definirIntervalos(mgs, dadosFicheiro);
-        ordenarValores(dadosFicheiro, linhas);
-        //MediaMovelSimples(dadosFicheiro, linhas);
+        MediaMovelSimples(dadosFicheiro, linhas);
 
     }
 
@@ -53,47 +47,60 @@ public class ProjetoV1 {
         String time = ler.nextLine();
         switch (time.toLowerCase()) {
             case "diario":
-                analisarDia(dadosFicheiro, linhas);
-                
+                int[] energiasD;
+                energiasD = analisarDia(dadosFicheiro, linhas);
+                    ordenarValores(energiasD, linhas);
                 break;
             case "mensal":
-                analisarMes(dadosFicheiro, linhas);
+                int[] energiasM;
+                energiasM = analisarMes(dadosFicheiro, linhas);
+                    ordenarValores(energiasM, linhas);
                 break;
             case "anual":
-                analisarAno(dadosFicheiro, linhas);
+                int[] energiasA;
+                energiasA=analisarAno(dadosFicheiro, linhas);
+                    ordenarValores(energiasA, linhas);
                 break;
             case "periodo do dia":
+                int[] energiasMadrugada;
                 System.out.println("Introduza o periodo do dia que pretende analisar!");
                 String periodo = ler.nextLine();
                 int lowerLimit,  upperLimit;
                 switch (periodo.toLowerCase()) {
                     case "madrugada":
+                        int[] energiasManha;
                         lowerLimit = 00;
                         upperLimit = 05;  
-                        analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
+                        energiasMadrugada=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
+                            ordenarValores(energiasMadrugada,linhas);
                         break;
                     case "manha":
                         lowerLimit = 06;
                         upperLimit = 11;
-                        analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
+                        energiasManha=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
+                            ordenarValores(energiasManha,linhas);
                         break;
                     case "tarde":
+                        int[] energiasTarde;
                         lowerLimit = 12;
                         upperLimit = 17;
-                        analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
+                        energiasTarde=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
+                            ordenarValores(energiasTarde,linhas);
                         break;
                     case "noite":
+                        int[] energiasNoite;
                         lowerLimit = 18;
                         upperLimit = 23;
-                        analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
+                        energiasNoite=analisarPeriodo(dadosFicheiro,lowerLimit, upperLimit,linhas);
+                            ordenarValores(energiasNoite,linhas);
                         break;
                 }
         }
     }
-    public static void analisarDia(int[][] dadosFicheiro, int linhas) { 
+    public static int[] analisarDia(int[][] dadosFicheiro, int linhas) { 
         int p=0;
         int soma = dadosFicheiro[0][4];
-        int [] energiasD = new int [1000];
+        int [] energiasD = new int [linhas];
         for(int posicao=0; posicao<linhas; posicao++){
            if(dadosFicheiro[posicao][2] == dadosFicheiro[posicao+1][2] && dadosFicheiro[posicao+1][4]!=0){
                soma = soma + dadosFicheiro[posicao+1][4];              
@@ -110,16 +117,16 @@ public class ProjetoV1 {
                x++;
            }
       //  visualizarGraf(energiasD);
-      
+      return energiasD;
     }
     /*public static void visualizarGraf(int [] energiasD){
         
     }*/
 
-    public static void analisarMes(int[][] dadosFicheiro, int linhas) {   
+    public static int[] analisarMes(int[][] dadosFicheiro, int linhas) {   
         int p=0;
         int soma = dadosFicheiro[0][4];
-        int [] energiasM = new int [33];
+        int [] energiasM = new int [linhas];
         for(int posicao=0; posicao<linhas; posicao++){
            if(dadosFicheiro[posicao][1] == dadosFicheiro[posicao+1][1] && dadosFicheiro[posicao+1][1]!=0){
                soma = soma + dadosFicheiro[posicao+1][4];
@@ -134,16 +141,17 @@ public class ProjetoV1 {
                System.out.println(energiasM[x]);
                x++;
            }
+        return energiasM;
       //  verGrafico(energiasM);
         
     }
    /* public static void verGrafico(int [] energiasM){
         
     }*/
-    public static void analisarAno(int[][] dadosFicheiro, int linhas) {
+    public static int[] analisarAno(int[][] dadosFicheiro, int linhas) {
         int p=0;
         int soma = dadosFicheiro[0][4];
-        int [] energiasA = new int [4];
+        int [] energiasA = new int [linhas];
         for(int posicao=0; posicao<linhas; posicao++){
            if(dadosFicheiro[posicao][0] == dadosFicheiro[posicao+1][0]){
                soma = soma + dadosFicheiro[posicao+1][4];
@@ -158,16 +166,17 @@ public class ProjetoV1 {
                System.out.println(energiasA[x]);
                x++;
            }
+        return energiasA;
        // mostrarGraf(energiasA);
     }
    /* public static void mostrarGraf (int [] energiasA){
         
     }*/
 
-    public static void analisarPeriodo(int[][] dadosFicheiro, int lowerLimit, int upperLimit, int linhas) {
+    public static int[] analisarPeriodo(int[][] dadosFicheiro, int lowerLimit, int upperLimit, int linhas) {
         int p=0;
         int soma=0;
-        int [] energiasP = new int [22700];
+        int [] energiasP = new int [linhas];
         for (int posicao = 0; posicao < linhas; posicao++) {
            if (dadosFicheiro[posicao][3] >= lowerLimit && dadosFicheiro[posicao][3] <= upperLimit && dadosFicheiro[posicao][2] == dadosFicheiro[posicao+1][2] && dadosFicheiro[posicao+1][4]!=0) {       
                soma= soma + dadosFicheiro[posicao][4];
@@ -185,6 +194,7 @@ public class ProjetoV1 {
                System.out.println(energiasP[x]);
                x++;
            }
+            return energiasP;
     }
 
     public static double mediaGlobal(int[][] dadosFicheiro, int linhas) {
@@ -250,105 +260,145 @@ public class ProjetoV1 {
         p.plot();
     }
 
-    public static void ordenarValores(int[][] dadosFicheiro, int linhas) {
+    public static void ordenarValores(int[] energia, int linhas) {
         Scanner utilizador = new Scanner(System.in);
         System.out.println("Pretende ordenar os valores de forma crescente ou decrescente?");
         String decisao = utilizador.nextLine();
-        if (decisao.equalsIgnoreCase("crescente")) {
-            int start=0, end=linhas-1;
-            mergeSortCrescente(dadosFicheiro, start, end);
-          
-           
+        if (decisao.equalsIgnoreCase("crescente") || decisao.equalsIgnoreCase("decrescente")) {
 
-        } else if (decisao.equalsIgnoreCase("decrescente")) {
-            int start=0, end=linhas-1;
-            mergeSortDecrescente(dadosFicheiro, start, end);
-           
-        } 
-        for (int z=0; z<linhas; z++){
-            System.out.println(dadosFicheiro[z][4]);
+            if (decisao.equalsIgnoreCase("crescente")) {
+                int start = 0, end = linhas - 1;
+                mergeSortCrescente(energia, start, end);
+
+            } else if (decisao.equalsIgnoreCase("decrescente")) {
+                int start = 0, end = linhas - 1;
+                mergeSortDecrescente(energia, start, end);
+
             }
+
+            for (int z = 0; z < linhas; z++) {
+                if(energia[z]!=0){
+                System.out.println(energia[z]);
+                }
+
+            }
+        }
     }
-    public static void merge(int[][] dadosFicheiro, int start, int mid, int end) {
+    public static void merge(int[] energias, int start, int mid, int end) {
         int temp[] = new int[end - start + 1];
         int i = start, j = mid + 1, k = 0;
         while (i <= mid && j <= end) {
-            if (dadosFicheiro[i][4] <= dadosFicheiro[j][4]) {
-                temp[k] = dadosFicheiro[i][4];
+            if (energias[i] <= energias[j]) {
+                temp[k] = energias[i];
                 k += 1;
                 i += 1;
             } else {
-                temp[k] = dadosFicheiro[j][4];
+                temp[k] = energias[j];
                 k += 1;
                 j += 1;
             }
         }
         while (i <= mid) {
-            temp[k] = dadosFicheiro[i][4];
+            temp[k] = energias[i];
             k += 1;
             i += 1;
         }
         while (j <= end) {
-            temp[k] = dadosFicheiro[j][4];
+            temp[k] = energias[j];
             k += 1;
             j += 1;
         }
         for (i = start; i <= end; i += 1) {
-            dadosFicheiro[i][4] = temp[i - start];
+            energias[i] = temp[i - start];
         }
          
         
     }
 
-    public static void mergeSortCrescente(int[][] dadosFicheiro, int start, int end) {
+    public static void mergeSortCrescente(int[] energias, int start, int end) {
 
         if (start < end) {
             int mid = (start + end) / 2;
-            mergeSortCrescente(dadosFicheiro, start, mid);
-            mergeSortCrescente(dadosFicheiro, mid + 1, end);
-            merge(dadosFicheiro, start, mid, end);
+            mergeSortCrescente(energias, start, mid);
+            mergeSortCrescente(energias, mid + 1, end);
+            merge(energias, start, mid, end);
         }
       
     }
     
-    public static void mergeDecrescente(int[][] dadosFicheiro, int start, int mid, int end) {
+    public static void mergeDecrescente(int[] energias, int start, int mid, int end) {
         int temp[] = new int[end - start + 1];
         int i = start, j = mid + 1, k = 0;
         while (i <= mid && j <= end) {
-            if (dadosFicheiro[i][4] >= dadosFicheiro[j][4]) {
-                temp[k] = dadosFicheiro[i][4];
+            if (energias[i] >= energias[j]) {
+                temp[k] = energias[i];
                 k += 1;
                 i += 1;
             } else {
-                temp[k] = dadosFicheiro[j][4];
+                temp[k] = energias[j];
                 k += 1;
                 j += 1;
             }
         }
         while (i <= mid) {
-            temp[k] = dadosFicheiro[i][4];
+            temp[k] = energias[i];
             k += 1;
             i += 1;
         }
         while (j <= end) {
-            temp[k] = dadosFicheiro[j][4];
+            temp[k] = energias[j];
             k += 1;
             j += 1;
         }
         for (i = start; i <= end; i += 1) {
-            dadosFicheiro[i][4] = temp[i - start];
+            energias[i] = temp[i - start];
         }
         
     }
 
-    public static void mergeSortDecrescente(int[][] dadosFicheiro, int start, int end) {
+    public static void mergeSortDecrescente(int[] energias, int start, int end) {
 
         if (start < end) {
             int mid = (start + end) / 2;
-            mergeSortDecrescente(dadosFicheiro, start, mid);
-            mergeSortDecrescente(dadosFicheiro, mid + 1, end);
-            mergeDecrescente(dadosFicheiro, start, mid, end);
+            mergeSortDecrescente(energias, start, mid);
+            mergeSortDecrescente(energias, mid + 1, end);
+            mergeDecrescente(energias, start, mid, end);
         }
     }
 
+
+    public static void mediaPesada(int[][] dadosFicheiro, int linhas) {
+        System.out.println("Suavização/Filtragem da série ");
+        Scanner ordem = new Scanner(System.in);
+        System.out.println("Introduza o valor de α");
+        double mmep[] = new double[linhas];
+        int x = 1;
+        double a;
+        a = ordem.nextDouble();
+        do {
+            a = ordem.nextDouble();
+        } while (a <= 0 || a >= 1);
+        for (int i = 0; i < linhas; i++) {
+            mmep[x] = a * dadosFicheiro[i][4] + (1 - a) * mmep[x - 1];
+            System.out.printf("%.1f\n", mmep[x]);
+            x++;
+        }
+    }
+    public static void MediaMovelSimples(int[][] dadosFicheiro, int linhas) {
+        System.out.println("Suavização/Filtragem da série orginal");
+        Scanner ordem = new Scanner(System.in);
+        System.out.println("Introduza o valor de n");
+        int n = ordem.nextInt();
+        double[] mms = new double[linhas];
+        double soma=0;
+                for (int i = 0; i < linhas; i++) {
+                    for (int k = 0; k < n  && i >= k; k++) {
+                        soma += (dadosFicheiro[i - k][4]);
+                    }
+                    mms[i] = soma / n;
+                    soma=0;
+                    System.out.println(mms[i]);
+                }
+    }
 }
+
