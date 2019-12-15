@@ -426,9 +426,9 @@ public class ProjetoLAPR {
 
     public static void ErroMediaAbsoluto(int[][] dadosFicheiro, int linhas, double[] media) {
         double erro=0, error;
-        System.out.println("ERRO");
+        System.out.println("Erro Média Absoluto: ");
         for (int x = 0; x < linhas - 1; x++) {
-            erro = Math.abs(dadosFicheiro[x][4] - media[x]);
+            erro = erro + Math.abs(dadosFicheiro[x][4] - media[x]);
         }
         error=erro/linhas;
         System.out.println(error);
