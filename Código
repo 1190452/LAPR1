@@ -5,11 +5,7 @@
  */
 package projetov1;
 
-import com.panayotis.gnuplot.JavaPlot;
-import com.panayotis.gnuplot.plot.DataSetPlot;
-import com.panayotis.gnuplot.style.NamedPlotColor;
-import com.panayotis.gnuplot.style.PlotStyle;
-import com.panayotis.gnuplot.style.Style;
+
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.Scanner;
@@ -231,10 +227,10 @@ public class ProjetoV1 {
                 contadorSup++;
             }
         }
-        visualizarGráfico(contadorInf, contadorMeio, contadorSup, mediaInferior, mediaSuperior);
+       // visualizarGráfico(contadorInf, contadorMeio, contadorSup, mediaInferior, mediaSuperior);
     }
 
-    public static void visualizarGráfico(int contadorInf, int contadorMeio, int contadorSup, double mediaInferior, double mediaSuperior) {
+   /*public static void visualizarGráfico(int contadorInf, int contadorMeio, int contadorSup, double mediaInferior, double mediaSuperior) {
         JavaPlot p = new JavaPlot();
         PlotStyle myPlotStyle = new PlotStyle();
         myPlotStyle.setStyle(Style.HISTOGRAMS);
@@ -250,7 +246,7 @@ public class ProjetoV1 {
         poisson(x) = lambda*x/int(x)!exp(-lambda);
         plot for [lambda=1:5:2] "+" using ($0-(lambda-3)*0.1):(poisson($0)) title sprintf("λ = %d", lambda);
          */
-        double tab[][];
+      /*  double tab[][];
         tab = new double[3][2];
         tab[0][0] = mediaInferior;
         tab[0][1] = contadorInf;
@@ -266,7 +262,7 @@ public class ProjetoV1 {
         p.newGraph();
         p.plot();
     }
-
+*/
     public static void ordenarValores(int[] energia, int linhas) {
         Scanner utilizador = new Scanner(System.in);
         System.out.println("Pretende ordenar os valores de forma crescente ou decrescente?");
@@ -384,7 +380,6 @@ public class ProjetoV1 {
                 case "media movel simples":
                     mms = MediaMovelSimples(dadosFicheiro, linhas);
                     ErroMediaAbsoluto(dadosFicheiro, linhas,  mms);
-
                     break;
                 case "media movel exponencialmente pesada":
                     mmep = mediaPesada(dadosFicheiro, linhas);
@@ -393,6 +388,7 @@ public class ProjetoV1 {
                 default:
                     break;
             }
+ 
         }
     
     public static double[] mediaPesada(int[][] dadosFicheiro, int linhas) {
@@ -414,7 +410,7 @@ public class ProjetoV1 {
         return mmep;
     }
 
-    public static double[] MediaMovelSimples(int[][] dadosFicheiro, int linhas) {
+    public static double [] MediaMovelSimples(int[][] dadosFicheiro, int linhas) {
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de n");
         int n = ordem.nextInt();
@@ -426,11 +422,8 @@ public class ProjetoV1 {
             }
             mms[i] = soma / n;
             soma = 0;
-
-        }
-        return mms;
-        
-       
+        }  
+       return mms;
     }
    
     public static void ErroMediaAbsoluto(int[][] dadosFicheiro, int linhas, double[] media) {
@@ -512,10 +505,10 @@ public class ProjetoV1 {
                                 previsaoMMS(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
                                 break;
 
-                                 default:
+                                default:
                                 break;
                 }            
-                
+                break;
                 case "dia":
                 System.out.println("Introduza o dia que pretende analisar");
                 dia = ler.nextInt();
@@ -536,7 +529,7 @@ public class ProjetoV1 {
                 break;
                 
             }
-            
+            break;
             case "media movel exponencialmente pesada":
             System.out.println("Introduza o espaço temporal que pretende analisar");
             escolha = ler.nextLine();
@@ -611,11 +604,11 @@ public class ProjetoV1 {
                 System.out.println("Introduza o ano");
                 ano = ler.nextInt();
                 previsaoMMEPMES(mes, ano, dadosFicheiro, linhas);  
-                break;
+                break;                                                                              
                
                 default:
                 break;
-           
+
             }
             default:
             break;
@@ -626,28 +619,28 @@ public class ProjetoV1 {
        double prev=0.0, resultado;
        System.out.println("Introduza a ordem da Média Móvel");
        int n = ler.nextInt(); 
-       for(int p=0; p<linhas-1;p++){
-            if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][3]>=lowerLimit && dadosFicheiro[linhas][3]<=upperLimit ){
-                prev = dadosFicheiro[linhas][4] - p + prev; 
+       for(int i=0; i<linhas;i++){
+           for(int k=0;k<n-1&&k<=i;k++){
+            if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3]>=lowerLimit && dadosFicheiro[linhas][3]<=upperLimit ){
+                prev = (dadosFicheiro[i - k][4]) + prev;
             }
         }
-        resultado = prev/n;
-       
-       
+            }
+        resultado = prev/n; 
     }
     public static void previsaoMMSDIA (int dia, int mes, int ano, int[][] dadosFicheiro, int linhas){ 
        Scanner ler = new Scanner(System.in);
        double prev=0.0, resultado;
        System.out.println("Introduza a ordem da Média Móvel");
        int n = ler.nextInt(); 
-       for(int p=0; p<linhas-1;p++){
+       for(int i=0; i<linhas;i++){
+           for(int k=0;k<n-1&&k<=i;k++){
             if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia ){
-                prev = dadosFicheiro[linhas][4] - p + prev; 
+                prev = (dadosFicheiro[i - k][4]) + prev;
             }
         }
+           }
         resultado = prev/n;
-       
-       
     }
     public static void previsaoMMSMES (int mes, int ano,int[][] dadosFicheiro, int linhas){ 
         int n;
@@ -655,24 +648,58 @@ public class ProjetoV1 {
         System.out.println("Introduza a ordem da média móvel");
         n = ler.nextInt();
         double prev=0, resultado;
-        for(int p=0; p<linhas-1;p++){
+        for(int i=0; i<linhas;i++){
+           for(int k=0;k<n-1&&k<=i;k++){
             if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes){
-                prev = dadosFicheiro[linhas][4] - p + prev; 
+                 prev = (dadosFicheiro[i - k][4]) + prev;
             }
         }
+            }     
         resultado = prev/n;
-        System.out.println(resultado);
     }
     
     //----------------------------------------------------------------------------------------------
     public static void previsaoMMEP (int dia,int mes, int ano, int upperLimit, int lowerLimit, int[][] dadosFicheiro, int linhas){
-         double prev=0.0;
+        double prev=0, a;
+        Scanner ordem = new Scanner(System.in);
+        System.out.println("Introduza o valor de α (]0,1[)");
+        do {
+            a = ordem.nextDouble();
+        } while (a <= 0 || a >= 1);
+        for (int i = 0; i < linhas; i++) {
+            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3]>=lowerLimit && dadosFicheiro[linhas][3]<=upperLimit ) {
+                prev = a * dadosFicheiro[i][4] + (1 - a) * dadosFicheiro[i][4];
+                
+            }
+        }
     }
     public static void previsaoMMEPDIA(int dia, int mes, int ano, int[][] dadosFicheiro, int linhas){
-         double prev=0.0;
+        double prev=0, a;
+        Scanner ordem = new Scanner(System.in);
+        System.out.println("Introduza o valor de α (]0,1[)");
+        do {
+            a = ordem.nextDouble();
+        } while (a <= 0 || a >= 1);
+        for (int i = 0; i < linhas; i++) {
+            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia ) {
+                prev = a * dadosFicheiro[i][4] + (1 - a) * dadosFicheiro[i][4];
+                
+            }
+        }
     }
     public static void previsaoMMEPMES(int mes, int ano, int[][] dadosFicheiro, int linhas){
-         double prev=0.0;
+        double prev=0, a;
+        Scanner ordem = new Scanner(System.in);
+        System.out.println("Introduza o valor de α (]0,1[)");
+        do {
+            a = ordem.nextDouble();
+        } while (a <= 0 || a >= 1);
+        for (int i = 0; i < linhas; i++) {
+            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes) {
+                prev = a * dadosFicheiro[i][4] + (1 - a) * dadosFicheiro[i][4];
+                
+            }
+        }
     }
        
 }
