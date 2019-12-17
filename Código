@@ -13,12 +13,13 @@ import java.util.Scanner;
 public class ProjetoV1 {
 
    public static void main(String[] args) throws FileNotFoundException {
+       
         int[][] dadosFicheiro = new int[22681][5];
         int linhas = guardarDados(dadosFicheiro);
-        analisarDados(dadosFicheiro, linhas);
-        double mgs = mediaGlobal(dadosFicheiro, linhas);
-        definirIntervalos(mgs, dadosFicheiro);
-        EscolhaMedia(dadosFicheiro, linhas);
+        int[] serieTemp = analisarDados(dadosFicheiro, linhas);
+        double mgs = mediaGlobal(serieTemp, linhas);
+        definirIntervalos(mgs, serieTemp);
+        EscolhaMedia(serieTemp, linhas);
         Previsao(dadosFicheiro, linhas);
         
     }
@@ -42,7 +43,7 @@ public class ProjetoV1 {
         return qtdlinhas;
     }
 
-    public static void analisarDados(int[][] dadosFicheiro, int linhas) {
+    public static int[] analisarDados(int[][] dadosFicheiro, int linhas) {
         Scanner ler = new Scanner(System.in);
         System.out.println("Introduza a resolução temporal: ");
         String time = ler.nextLine();
@@ -51,53 +52,54 @@ public class ProjetoV1 {
                 int[] energiasD;
                 energiasD = analisarDia(dadosFicheiro, linhas);
                 ordenarValores(energiasD, linhas);
-                break;
+                return energiasD;
             case "mensal":
                 int[] energiasM;
                 energiasM = analisarMes(dadosFicheiro, linhas);
                 ordenarValores(energiasM, linhas);
-                break;
+                return energiasM;
             case "anual":
                 int[] energiasA;
                 energiasA = analisarAno(dadosFicheiro, linhas);
                 ordenarValores(energiasA, linhas);
-                break;
+                return energiasA;
             case "periodo do dia":
-                int[] energiasMadrugada;
                 System.out.println("Introduza o periodo do dia que pretende analisar!");
                 String periodo = ler.nextLine();
-                int lowerLimit,
-                 upperLimit;
+                int lowerLimit,upperLimit;
                 switch (periodo.toLowerCase()) {
                     case "madrugada":
-                        int[] energiasManha;
+                        int[] energiasMadrugada;
                         lowerLimit = 00;
                         upperLimit = 05;
                         energiasMadrugada = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
-                        ordenarValores(energiasMadrugada, linhas);
-                        break;
+                        ordenarValores(energiasMadrugada, linhas);    
+                        return energiasMadrugada;
                     case "manha":
+                        int[] energiasManha;
                         lowerLimit = 06;
                         upperLimit = 11;
                         energiasManha = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
                         ordenarValores(energiasManha, linhas);
-                        break;
+                        return energiasManha;
                     case "tarde":
                         int[] energiasTarde;
                         lowerLimit = 12;
                         upperLimit = 17;
                         energiasTarde = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
                         ordenarValores(energiasTarde, linhas);
-                        break;
+                        return energiasTarde;
                     case "noite":
                         int[] energiasNoite;
                         lowerLimit = 18;
                         upperLimit = 23;
                         energiasNoite = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
                         ordenarValores(energiasNoite, linhas);
-                        break;
+                        return energiasNoite;
                 }
         }
+       return null;
+     
     }
 
     public static int[] analisarDia(int[][] dadosFicheiro, int linhas) {
@@ -119,6 +121,7 @@ public class ProjetoV1 {
             System.out.println(energiasD[x]);
             x++;
         }
+        
         //  visualizarGraf(energiasD);
         return energiasD;
     }
@@ -144,6 +147,7 @@ public class ProjetoV1 {
             System.out.println(energiasM[x]);
             x++;
         }
+        
         return energiasM;
         //  verGrafico(energiasM);
 
@@ -200,28 +204,28 @@ public class ProjetoV1 {
         return energiasP;
     }
 
-    public static double mediaGlobal(int[][] dadosFicheiro, int linhas) {
+    public static double mediaGlobal(int[]serieTemp, int linhas) {
         int somaFinal = 0;
         double media;
-        for (int i = 0; i < dadosFicheiro.length; i++) {
-            somaFinal = dadosFicheiro[i][4] + somaFinal;
+        for (int i = 0; i < serieTemp.length; i++) {
+            somaFinal = serieTemp[i] + somaFinal;
         }
         media = somaFinal / linhas;
         return media;
     }
 
-    public static void definirIntervalos(double mgs, int[][] dadosFicheiro) {
+    public static void definirIntervalos(double mgs, int[] serieTemp) {
         double mediaInferior = mgs - (0.2 * mgs);
         double mediaSuperior = mgs + (0.2 * mgs);
-        numeroObservacoes(dadosFicheiro, mediaInferior, mediaSuperior);
+        numeroObservacoes(serieTemp, mediaInferior, mediaSuperior);
     }
 
-    public static void numeroObservacoes(int[][] dadosFicheiro, double mediaInferior, double mediaSuperior) {
+    public static void numeroObservacoes(int[] serieTemp, double mediaInferior, double mediaSuperior) {
         int contadorInf = 0, contadorSup = 0, contadorMeio = 0, contador;
-        for (int posicao = 0; posicao < dadosFicheiro.length; posicao++) {
-            if (dadosFicheiro[posicao][4] < mediaInferior) {
+        for (int posicao = 0; posicao < serieTemp.length; posicao++) {
+            if (serieTemp[posicao] < mediaInferior) {
                 contadorInf++;
-            } else if (dadosFicheiro[posicao][4] >= mediaInferior && dadosFicheiro[posicao][4] < mediaSuperior) {
+            } else if (serieTemp[posicao] >= mediaInferior && serieTemp[posicao] < mediaSuperior) {
                 contadorMeio++;
             } else {
                 contadorSup++;
@@ -369,7 +373,7 @@ public class ProjetoV1 {
         }
     }
 
-    public static void EscolhaMedia(int[][] dadosFicheiro, int linhas) {
+    public static void EscolhaMedia(int[] serieTemp, int linhas) {
             System.out.println("Suavização/Filtragem da série orginal");
             Scanner ler = new Scanner(System.in);
             System.out.println("Introduza o tipo de média a utilizar (Média Móvel Simples |OU| Média Móvel Exponencialmente Pesada): ");
@@ -378,12 +382,12 @@ public class ProjetoV1 {
             double[] mmep;
             switch (media.toLowerCase()) {
                 case "media movel simples":
-                    mms = MediaMovelSimples(dadosFicheiro, linhas);
-                    ErroMediaAbsoluto(dadosFicheiro, linhas,  mms);
+                    mms = MediaMovelSimples(serieTemp, linhas);
+                    ErroMediaAbsoluto(serieTemp, linhas,  mms);
                     break;
                 case "media movel exponencialmente pesada":
-                    mmep = mediaPesada(dadosFicheiro, linhas);
-                    ErroMediaAbsoluto(dadosFicheiro, linhas,  mmep);
+                    mmep = mediaPesada(serieTemp, linhas);
+                    ErroMediaAbsoluto(serieTemp, linhas,  mmep);
                     break;
                 default:
                     break;
@@ -391,7 +395,7 @@ public class ProjetoV1 {
  
         }
     
-    public static double[] mediaPesada(int[][] dadosFicheiro, int linhas) {
+    public static double[] mediaPesada(int[] serieTemp, int linhas) {
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de α (]0,1[)");
         double mmep[] = new double[linhas];
@@ -402,35 +406,41 @@ public class ProjetoV1 {
         } while (a <= 0 || a >= 1);
         for (int i = 0; i < linhas; i++) {
             if ((x - 1) >= 0) {
-                mmep[x] = a * dadosFicheiro[i][4] + (1 - a) * mmep[x - 1];
+                mmep[x] = a * serieTemp[i] + (1 - a) * mmep[x - 1];
+                if(mmep[x]>0){
                 System.out.printf("%.1f\n", mmep[x]);
+        }  
+           
             }
             x++;
         }
         return mmep;
     }
 
-    public static double [] MediaMovelSimples(int[][] dadosFicheiro, int linhas) {
+    public static double [] MediaMovelSimples(int[]serieTemp, int linhas) {
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de n");
         int n = ordem.nextInt();
         double[] mms = new double[linhas];
         double soma = 0;
         for (int i = 0; i < linhas; i++) {
-            for (int k = 0; k < n && i >= k; k++) {
-                soma += (dadosFicheiro[i - k][4]);
+            for (int k = 0; k < n && k<=i; k++) {
+                soma += (serieTemp[i - k]);
             }
             mms[i] = soma / n;
             soma = 0;
+            if(mms[i]>0){
+            System.out.println(mms[i]);
         }  
+            }
        return mms;
     }
    
-    public static void ErroMediaAbsoluto(int[][] dadosFicheiro, int linhas, double[] media) {
+    public static void ErroMediaAbsoluto(int[] serieTemp, int linhas, double[] media) {
         double erro=0, error;
         System.out.println("ERRO");
         for (int x = 0; x < linhas - 1; x++) {
-            erro = erro + Math.abs(media[x] - dadosFicheiro[x][4]);
+            erro = erro + Math.abs(media[x] - serieTemp[x]);
         }
         error=erro/linhas;
         System.out.println(error);
@@ -620,7 +630,7 @@ public class ProjetoV1 {
        System.out.println("Introduza a ordem da Média Móvel");
        int n = ler.nextInt(); 
        for(int i=0; i<linhas;i++){
-           for(int k=0;k<n-1&&k<=i;k++){
+           for(int k=0;k<n&&k<=i;k++){
             if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3]>=lowerLimit && dadosFicheiro[linhas][3]<=upperLimit ){
                 prev = (dadosFicheiro[i - k][4]) + prev;
             }
@@ -634,7 +644,7 @@ public class ProjetoV1 {
        System.out.println("Introduza a ordem da Média Móvel");
        int n = ler.nextInt(); 
        for(int i=0; i<linhas;i++){
-           for(int k=0;k<n-1&&k<=i;k++){
+           for(int k=0;k<n&&k<=i;k++){
             if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia ){
                 prev = (dadosFicheiro[i - k][4]) + prev;
             }
@@ -649,7 +659,7 @@ public class ProjetoV1 {
         n = ler.nextInt();
         double prev=0, resultado;
         for(int i=0; i<linhas;i++){
-           for(int k=0;k<n-1&&k<=i;k++){
+           for(int k=0;k<n&&k<=i;k++){
             if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes){
                  prev = (dadosFicheiro[i - k][4]) + prev;
             }
@@ -668,7 +678,7 @@ public class ProjetoV1 {
         } while (a <= 0 || a >= 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3]>=lowerLimit && dadosFicheiro[linhas][3]<=upperLimit ) {
-                prev = a * dadosFicheiro[i][4] + (1 - a) * dadosFicheiro[i][4];
+                prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
                 
             }
         }
@@ -682,7 +692,7 @@ public class ProjetoV1 {
         } while (a <= 0 || a >= 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia ) {
-                prev = a * dadosFicheiro[i][4] + (1 - a) * dadosFicheiro[i][4];
+                prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
                 
             }
         }
@@ -696,7 +706,7 @@ public class ProjetoV1 {
         } while (a <= 0 || a >= 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes) {
-                prev = a * dadosFicheiro[i][4] + (1 - a) * dadosFicheiro[i][4];
+                prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
                 
             }
         }
