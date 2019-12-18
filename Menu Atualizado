@@ -16,6 +16,9 @@ System.out.println("|-----------|-----------------------------------------------
         System.out.println("|     4     | Previsão de valores futuros a partir de uma série temporal             |    Cálculo do previsão através da Média Móvel Simples                                         |");
         System.out.println("|           |                                                                        |    Cálculo do previsão através da Média Móvel Exponencialmente Pesada                         |");
         System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println("|     5     | Introdução de um novo ficheiro                                         |    Leitura de um novo ficheiro CSV                                                            |");
+        System.out.println("|           |                                                                        |    Apagar da memória toda a informação antiga                                                 |");
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
         System.out.println("|     0     | Sair                                                                   |    Fechar a aplicação                                                                         |");
         System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
         System.out.println();
