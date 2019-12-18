@@ -5,25 +5,80 @@
  */
 package projetov1;
 
-
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.Scanner;
 
 public class ProjetoV1 {
 
-   public static void main(String[] args) throws FileNotFoundException {
-       
+    public static void main(String[] args) throws FileNotFoundException {
         int[][] dadosFicheiro = new int[22681][5];
-        int linhas = guardarDados(dadosFicheiro);
-        int[] serieTemp = analisarDados(dadosFicheiro, linhas);
-        double mgs = mediaGlobal(serieTemp, linhas);
-        definirIntervalos(mgs, serieTemp);
-        EscolhaMedia(serieTemp, linhas);
-        Previsao(dadosFicheiro, linhas);
-        
+        int linhas=0;
+        int[] serieTemp=null;
+        Scanner ler=new Scanner(System.in);
+        /*
+        File f = new File(args[0]);
+        if (f.exists()){
+            System.out.println("Ficheiro verificado com sucesso, escolha a funcionalidade!");
+        }
+        if (!f.exists()){
+                        System.out.println("Ficheiro não existe, a sair!");
+        System.exit(0); 
+        }
+        */
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println("|  Função   |                              Descrição                                 |                                  Funcionalidades                                              |");
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println("|     1     | Leitura do Ficheiro                                                    |    Leitura do ficheiro CSV e carregamento do mesmo para a aplicação                           |");
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println("|           |                                                                        |    Escolha de uma resolução temporal                                                          |");
+        System.out.println("|           |                                                                        |    Cálculo da média global da série                                                           |");
+        System.out.println("|     2     | Análise de séries temporais utilizando diferentes resoluções           |    Definição dos intervalos para apresentação do histograma                                   |");
+        System.out.println("|           |                                                                        |    Cálculo do número de observações                                                           |");
+        System.out.println("|           |                                                                        |    Ordenação da série temporal                                                                |");
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println("|     3     | Filtragem/Suavização de séries temporais                               |    Filtragem através da Média Móvel Simples                                                   |");
+        System.out.println("|           |                                                                        |    Filtragem através da Média Móvel Exponencialmente Pesada                                   |");
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println("|           |                                                                        |    Escolha de uma resolução temporal                                                          |");
+        System.out.println("|     4     | Previsão de valores futuros a partir de uma série temporal             |    Cálculo do previsão através da Média Móvel Simples                                         |");
+        System.out.println("|           |                                                                        |    Cálculo do previsão através da Média Móvel Exponencialmente Pesada                         |");
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println("|     5     | Introdução de um novo ficheiro                                         |    Leitura de um novo ficheiro CSV                                                            |");
+        System.out.println("|           |                                                                        |    Apagar da memória toda a informação antiga                                                 |");
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println("|     0     | Sair                                                                   |    Fechar a aplicação                                                                         |");
+        System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
+        System.out.println();
+        System.out.println("Qual o exercício que pretende executar?");
+        int N=ler.nextInt();
+        while(N>0){
+            switch(N){
+                case 1:
+                    linhas = guardarDados(dadosFicheiro);
+                    System.out.println("INFORMAÇÃO DO FICHEIRO ARMAZENADA EM MEMÓRIA!!");
+                    break;
+                case 2:
+                    serieTemp = analisarDados(dadosFicheiro, linhas); 
+                    double mgs = mediaGlobal(serieTemp, linhas);  
+                    definirIntervalos(mgs, serieTemp);
+                    break;
+                case 3:
+                    EscolhaMedia(serieTemp, linhas);
+                    break;
+                case 4:
+                    Previsao(dadosFicheiro, linhas);
+                    break;
+                case 5:                                 
+                    lerFicheiroCSV(dadosFicheiro);
+                default:
+                    break;     
+            }
+            System.out.println("");
+            System.out.println("Que outra funcionalidade pretende utilizar?");
+            N=ler.nextInt();        
+        } 
     }
-
     public static int guardarDados(int[][] dadosFicheiro) throws FileNotFoundException {
         int qtdlinhas = 0;
         Scanner lerFicheiro = new Scanner(new File("DAYTON.csv"));
@@ -44,6 +99,7 @@ public class ProjetoV1 {
     }
 
     public static int[] analisarDados(int[][] dadosFicheiro, int linhas) {
+        System.out.println("ANÁLISE");
         Scanner ler = new Scanner(System.in);
         System.out.println("Introduza a resolução temporal: ");
         String time = ler.nextLine();
@@ -66,14 +122,15 @@ public class ProjetoV1 {
             case "periodo do dia":
                 System.out.println("Introduza o periodo do dia que pretende analisar!");
                 String periodo = ler.nextLine();
-                int lowerLimit,upperLimit;
+                int lowerLimit,
+                 upperLimit;
                 switch (periodo.toLowerCase()) {
                     case "madrugada":
                         int[] energiasMadrugada;
                         lowerLimit = 00;
                         upperLimit = 05;
                         energiasMadrugada = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
-                        ordenarValores(energiasMadrugada, linhas);    
+                        ordenarValores(energiasMadrugada, linhas);
                         return energiasMadrugada;
                     case "manha":
                         int[] energiasManha;
@@ -96,10 +153,14 @@ public class ProjetoV1 {
                         energiasNoite = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
                         ordenarValores(energiasNoite, linhas);
                         return energiasNoite;
+                    case "default":
+                        break;
                 }
+            case "default":
+                break;
         }
-       return null;
-     
+        return null;
+
     }
 
     public static int[] analisarDia(int[][] dadosFicheiro, int linhas) {
@@ -121,7 +182,7 @@ public class ProjetoV1 {
             System.out.println(energiasD[x]);
             x++;
         }
-        
+
         //  visualizarGraf(energiasD);
         return energiasD;
     }
@@ -147,7 +208,7 @@ public class ProjetoV1 {
             System.out.println(energiasM[x]);
             x++;
         }
-        
+
         return energiasM;
         //  verGrafico(energiasM);
 
@@ -204,7 +265,7 @@ public class ProjetoV1 {
         return energiasP;
     }
 
-    public static double mediaGlobal(int[]serieTemp, int linhas) {
+    public static double mediaGlobal(int[] serieTemp, int linhas) {
         int somaFinal = 0;
         double media;
         for (int i = 0; i < serieTemp.length; i++) {
@@ -231,10 +292,10 @@ public class ProjetoV1 {
                 contadorSup++;
             }
         }
-       // visualizarGráfico(contadorInf, contadorMeio, contadorSup, mediaInferior, mediaSuperior);
+        // visualizarGráfico(contadorInf, contadorMeio, contadorSup, mediaInferior, mediaSuperior);
     }
 
-   /*public static void visualizarGráfico(int contadorInf, int contadorMeio, int contadorSup, double mediaInferior, double mediaSuperior) {
+    /*public static void visualizarGráfico(int contadorInf, int contadorMeio, int contadorSup, double mediaInferior, double mediaSuperior) {
         JavaPlot p = new JavaPlot();
         PlotStyle myPlotStyle = new PlotStyle();
         myPlotStyle.setStyle(Style.HISTOGRAMS);
@@ -249,8 +310,8 @@ public class ProjetoV1 {
 
         poisson(x) = lambda*x/int(x)!exp(-lambda);
         plot for [lambda=1:5:2] "+" using ($0-(lambda-3)*0.1):(poisson($0)) title sprintf("λ = %d", lambda);
-         */
-      /*  double tab[][];
+     */
+ /*  double tab[][];
         tab = new double[3][2];
         tab[0][0] = mediaInferior;
         tab[0][1] = contadorInf;
@@ -266,7 +327,7 @@ public class ProjetoV1 {
         p.newGraph();
         p.plot();
     }
-*/
+     */
     public static void ordenarValores(int[] energia, int linhas) {
         Scanner utilizador = new Scanner(System.in);
         System.out.println("Pretende ordenar os valores de forma crescente ou decrescente?");
@@ -373,113 +434,164 @@ public class ProjetoV1 {
         }
     }
 
-    public static void EscolhaMedia(int[] serieTemp, int linhas) {
-            System.out.println("Suavização/Filtragem da série orginal");
-            Scanner ler = new Scanner(System.in);
-            System.out.println("Introduza o tipo de média a utilizar (Média Móvel Simples |OU| Média Móvel Exponencialmente Pesada): ");
-            String media = ler.nextLine();
-            double[] mms;
-            double[] mmep;
-            switch (media.toLowerCase()) {
-                case "media movel simples":
-                    mms = MediaMovelSimples(serieTemp, linhas);
-                    ErroMediaAbsoluto(serieTemp, linhas,  mms);
-                    break;
-                case "media movel exponencialmente pesada":
-                    mmep = mediaPesada(serieTemp, linhas);
-                    ErroMediaAbsoluto(serieTemp, linhas,  mmep);
-                    break;
-                default:
-                    break;
-            }
- 
+    public static void EscolhaFiltragem(int[][] dadosFicheiro, int linhas) {
+        System.out.println("Suavização/Filtragem da série orginal");
+        Scanner ler = new Scanner(System.in);
+        System.out.println("Introduza a resolução temporal: ");
+        String time = ler.nextLine();
+        switch (time.toLowerCase()) {
+            case "diario":
+                int[] energiaD = analisarDia(dadosFicheiro, linhas);
+                EscolhaMedia(energiaD, linhas);
+                break;
+            case "mensal":
+                int[] energiaM = analisarMes(dadosFicheiro, linhas);
+                EscolhaMedia(energiaM, linhas);
+                break;
+            case "anual":
+                int[] energiaA2 = analisarAno(dadosFicheiro, linhas);
+                EscolhaMedia(energiaA2, linhas);
+                break;
+            case "periodo do dia":
+                System.out.println("Introduza o periodo do dia que pretende analisar!");
+                String periodo = ler.nextLine();
+                int lowerLimit,
+                 upperLimit;
+                switch (periodo.toLowerCase()) {
+                    case "madrugada":
+                        lowerLimit = 00;
+                        upperLimit = 05;
+                        int[] energiasMadrugada2 = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        EscolhaMedia(energiasMadrugada2, linhas);
+                        break;
+                    case "manha":
+                        lowerLimit = 06;
+                        upperLimit = 11;
+                        int[] energiasManha2 = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        EscolhaMedia(energiasManha2, linhas);
+                        break;
+                    case "tarde":
+                        lowerLimit = 12;
+                        upperLimit = 17;
+                        int[] energiasTarde2 = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        EscolhaMedia(energiasTarde2, linhas);
+                        break;
+                    case "noite":
+                        lowerLimit = 18;
+                        upperLimit = 23;
+                        int[] energiasNoite2 = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        EscolhaMedia(energiasNoite2, linhas);
+                        break;
+                        
+                }
         }
-    
-    public static double[] mediaPesada(int[] serieTemp, int linhas) {
+    }
+
+    public static void EscolhaMedia(int[] energia, int linhas) {
+        Scanner ler = new Scanner(System.in);
+        System.out.println("Introduza o tipo de média a utilizar (Média Móvel Simples |OU| Média Móvel Exponencialmente Pesada): ");
+        String media = ler.nextLine();
+        double[] mms;
+        double[] mmep;
+        switch (media.toLowerCase()) {
+            case "media movel simples":
+                mms = MediaMovelSimples(energia, linhas);
+                ErroMediaAbsoluto(energia, linhas, mms);
+                break;
+            case "media movel exponencialmente pesada":
+                mmep = mediaPesada(energia, linhas);
+                ErroMediaAbsoluto(energia, linhas, mmep);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    public static double[] mediaPesada(int[] energia, int linhas) {
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de α (]0,1[)");
         double mmep[] = new double[linhas];
         int x = 0;
         double a;
+        mmep[0]=energia[0];
         do {
             a = ordem.nextDouble();
         } while (a <= 0 || a >= 1);
         for (int i = 0; i < linhas; i++) {
             if ((x - 1) >= 0) {
-                mmep[x] = a * serieTemp[i] + (1 - a) * mmep[x - 1];
-                if(mmep[x]>0){
-                System.out.printf("%.1f\n", mmep[x]);
-        }  
-           
+                mmep[x] = a * energia[i] + (1 - a) * mmep[x - 1];
+                if (mmep[x] > 0) {
+                    System.out.println(mmep[x]);
+                }
             }
             x++;
         }
         return mmep;
     }
 
-    public static double [] MediaMovelSimples(int[]serieTemp, int linhas) {
+    public static double[] MediaMovelSimples(int[] energia, int linhas) {
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de n");
         int n = ordem.nextInt();
         double[] mms = new double[linhas];
         double soma = 0;
-        for (int i = 0; i < linhas; i++) {
-            for (int k = 0; k < n && k<=i; k++) {
-                soma += (serieTemp[i - k]);
+        for (int i = 0; i < energia.length; i++) {
+            for (int k = 0; k < n && k <= i; k++) {
+                soma += (energia[i - k]);
             }
             mms[i] = soma / n;
             soma = 0;
-            if(mms[i]>0){
-            System.out.println(mms[i]);
-        }  
+            if (mms[i] > 0) {
+                System.out.printf("%.1f\n",mms[i]);
             }
-       return mms;
+        }
+        return mms;
     }
-   
+
     public static void ErroMediaAbsoluto(int[] serieTemp, int linhas, double[] media) {
-        double erro=0, error;
-        System.out.println("ERRO");
+        double erro = 0, error;
+        System.out.println("Erro Médio Absoluto");
         for (int x = 0; x < linhas - 1; x++) {
             erro = erro + Math.abs(media[x] - serieTemp[x]);
         }
-        error=erro/linhas;
+        error = erro / linhas;
         System.out.println(error);
     }
-    
-    public static void Previsao (int[][] dadosFicheiro, int linhas) {
+
+    public static void Previsao(int[][] dadosFicheiro, int linhas) {
         Scanner ler = new Scanner(System.in);
         String escolha, modelo, periodo;
         int dia, mes, ano;
         int lowerLimit, upperLimit;
-        
+        System.out.println("PREVISÃO");
         System.out.println("Que modelo pretende utilizar? Média Móvel Simples (ou) Média Móvel Exponencialmente Pesada");
         modelo = ler.nextLine();
-        
-        switch(modelo.toLowerCase()) {
+
+        switch (modelo.toLowerCase()) {
             case "media movel simples":
-            System.out.println("Introduza o espaço temporal que pretende analisar (periodo do dia, dia ou mes)");
-            escolha = ler.nextLine();
-            
-            
-                    switch(escolha.toLowerCase()) {
-                            case "periodo do dia":
-                             System.out.println("Introduza o periodo do dia que pretende (madrugada, manha, tarde ou noite)");
-                             periodo = ler.nextLine();
-                            switch (periodo.toLowerCase()) {
-                                
-                                 case "madrugada":               
+                System.out.println("Introduza o espaço temporal que pretende analisar (periodo do dia, dia ou mes)");
+                escolha = ler.nextLine();
+
+                switch (escolha.toLowerCase()) {
+                    case "periodo do dia":
+                        System.out.println("Introduza o periodo do dia que pretende (madrugada, manha, tarde ou noite)");
+                        periodo = ler.nextLine();
+                        switch (periodo.toLowerCase()) {
+
+                            case "madrugada":
                                 lowerLimit = 00;
-                                upperLimit = 05;  
+                                upperLimit = 05;
                                 System.out.println("Introduza o dia que pretende analisar");
                                 dia = ler.nextInt();
                                 System.out.println("Introduza o mes que pretende analisar");
                                 mes = ler.nextInt();
                                 System.out.println("Introduza o ano");
-                                ano = ler.nextInt(); 
+                                ano = ler.nextInt();
                                 previsaoMMS(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
                                 break;
-                                
-                                  case "manha":
+
+                            case "manha":
                                 lowerLimit = 06;
                                 upperLimit = 11;
                                 System.out.println("Introduza o dia que pretende analisar");
@@ -490,8 +602,8 @@ public class ProjetoV1 {
                                 ano = ler.nextInt();
                                 previsaoMMS(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
                                 break;
-                                
-                                 case "tarde":
+
+                            case "tarde":
                                 lowerLimit = 12;
                                 upperLimit = 17;
                                 System.out.println("Introduza o dia que pretende analisar");
@@ -500,10 +612,10 @@ public class ProjetoV1 {
                                 mes = ler.nextInt();
                                 System.out.println("Introduza o ano");
                                 ano = ler.nextInt();
-                                previsaoMMS(dia, mes, ano, upperLimit, lowerLimit,dadosFicheiro, linhas);                   
+                                previsaoMMS(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
                                 break;
-                                
-                                 case "noite":
+
+                            case "noite":
                                 lowerLimit = 18;
                                 upperLimit = 23;
                                 System.out.println("Introduza o dia que pretende analisar");
@@ -515,190 +627,195 @@ public class ProjetoV1 {
                                 previsaoMMS(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
                                 break;
 
-                                default:
+                            default:
                                 break;
-                }            
-                break;
-                case "dia":
-                System.out.println("Introduza o dia que pretende analisar");
-                dia = ler.nextInt();
-                System.out.println("Introduza o mes");
-                mes = ler.nextInt();
-                System.out.println("Introduza o ano");
-                ano = ler.nextInt();
-                previsaoMMSDIA(dia, mes, ano, dadosFicheiro, linhas);
-                break;
-                case "mes":
-                System.out.println("Introduza o mes que pretende analisar");
-                mes = ler.nextInt();
-                System.out.println("Introduza o ano");
-                ano = ler.nextInt(); 
-                previsaoMMSMES(mes, ano, dadosFicheiro, linhas);    
-                break;
-                default:
-                break;
-                
-            }
-            break;
-            case "media movel exponencialmente pesada":
-            System.out.println("Introduza o espaço temporal que pretende analisar");
-            escolha = ler.nextLine();
-            
-            switch(escolha.toLowerCase()) {
-                case "periodo do dia":
-                System.out.println("Introduza o periodo do dia que pretende: ");
-                periodo = ler.nextLine();
-                switch (periodo.toLowerCase()) {
-                    case "madrugada":               
-                        lowerLimit = 00;
-                        upperLimit = 05;
+                        }
+                        break;
+                    case "dia":
                         System.out.println("Introduza o dia que pretende analisar");
                         dia = ler.nextInt();
+                        System.out.println("Introduza o mes");
+                        mes = ler.nextInt();
+                        System.out.println("Introduza o ano");
+                        ano = ler.nextInt();
+                        previsaoMMSDIA(dia, mes, ano, dadosFicheiro, linhas);
+                        break;
+                    case "mes":
                         System.out.println("Introduza o mes que pretende analisar");
                         mes = ler.nextInt();
                         System.out.println("Introduza o ano");
                         ano = ler.nextInt();
-                        previsaoMMEP(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
+                        previsaoMMSMES(mes, ano, dadosFicheiro, linhas);
                         break;
-                    case "manha":
-                        lowerLimit = 06;
-                        upperLimit = 11;
-                        System.out.println("Introduza o dia que pretende analisar");
-                        dia = ler.nextInt();
-                        System.out.println("Introduza o mes que pretende analisar");
-                        mes = ler.nextInt();
-                        System.out.println("Introduza o ano");
-                        ano = ler.nextInt();
-                        previsaoMMEP(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
-                        break;
-                    case "tarde":
-                        lowerLimit = 12;
-                        upperLimit = 17;
-                        System.out.println("Introduza o dia que pretende analisar");
-                        dia = ler.nextInt();
-                        System.out.println("Introduza o mes que pretende analisar");
-                        mes = ler.nextInt();
-                        System.out.println("Introduza o ano");
-                        ano = ler.nextInt(); 
-                        previsaoMMEP(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);            
-                        break;
-                    case "noite":
-                        lowerLimit = 18;
-                        upperLimit = 23;
-                        System.out.println("Introduza o dia que pretende analisar");
-                        dia = ler.nextInt();
-                        System.out.println("Introduza o mes que pretende analisar");
-                        mes = ler.nextInt();
-                        System.out.println("Introduza o ano");
-                        ano = ler.nextInt();
-                        previsaoMMEP(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
-                        break;
-                        
                     default:
-                    break;
-               
-                }
-                
-                case "dia":
-                System.out.println("Introduza o dia que pretende analisar");
-                dia = ler.nextInt();
-                System.out.println("Introduza o mes");
-                mes = ler.nextInt();
-                System.out.println("Introduza o ano");
-                ano = ler.nextInt();
-                previsaoMMEPDIA(dia, mes, ano, dadosFicheiro, linhas);
-                break;
-                case "mes":
-                System.out.println("Introduza o mes que pretende analisar");
-                mes = ler.nextInt();
-                System.out.println("Introduza o ano");
-                ano = ler.nextInt();
-                previsaoMMEPMES(mes, ano, dadosFicheiro, linhas);  
-                break;                                                                              
-               
-                default:
-                break;
+                        break;
 
-            }
+                }
+                break;
+            case "media movel exponencialmente pesada":
+                System.out.println("Introduza o espaço temporal que pretende analisar");
+                escolha = ler.nextLine();
+
+                switch (escolha.toLowerCase()) {
+                    case "periodo do dia":
+                        System.out.println("Introduza o periodo do dia que pretende: ");
+                        periodo = ler.nextLine();
+                        switch (periodo.toLowerCase()) {
+                            case "madrugada":
+                                lowerLimit = 00;
+                                upperLimit = 05;
+                                System.out.println("Introduza o dia que pretende analisar");
+                                dia = ler.nextInt();
+                                System.out.println("Introduza o mes que pretende analisar");
+                                mes = ler.nextInt();
+                                System.out.println("Introduza o ano");
+                                ano = ler.nextInt();
+                                previsaoMMEP(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
+                                break;
+                            case "manha":
+                                lowerLimit = 06;
+                                upperLimit = 11;
+                                System.out.println("Introduza o dia que pretende analisar");
+                                dia = ler.nextInt();
+                                System.out.println("Introduza o mes que pretende analisar");
+                                mes = ler.nextInt();
+                                System.out.println("Introduza o ano");
+                                ano = ler.nextInt();
+                                previsaoMMEP(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
+                                break;
+                            case "tarde":
+                                lowerLimit = 12;
+                                upperLimit = 17;
+                                System.out.println("Introduza o dia que pretende analisar");
+                                dia = ler.nextInt();
+                                System.out.println("Introduza o mes que pretende analisar");
+                                mes = ler.nextInt();
+                                System.out.println("Introduza o ano");
+                                ano = ler.nextInt();
+                                previsaoMMEP(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
+                                break;
+                            case "noite":
+                                lowerLimit = 18;
+                                upperLimit = 23;
+                                System.out.println("Introduza o dia que pretende analisar");
+                                dia = ler.nextInt();
+                                System.out.println("Introduza o mes que pretende analisar");
+                                mes = ler.nextInt();
+                                System.out.println("Introduza o ano");
+                                ano = ler.nextInt();
+                                previsaoMMEP(dia, mes, ano, upperLimit, lowerLimit, dadosFicheiro, linhas);
+                                break;
+
+                            default:
+                                break;
+
+                        }
+
+                    case "dia":
+                        System.out.println("Introduza o dia que pretende analisar");
+                        dia = ler.nextInt();
+                        System.out.println("Introduza o mes");
+                        mes = ler.nextInt();
+                        System.out.println("Introduza o ano");
+                        ano = ler.nextInt();
+                        previsaoMMEPDIA(dia, mes, ano, dadosFicheiro, linhas);
+                        break;
+                    case "mes":
+                        System.out.println("Introduza o mes que pretende analisar");
+                        mes = ler.nextInt();
+                        System.out.println("Introduza o ano");
+                        ano = ler.nextInt();
+                        previsaoMMEPMES(mes, ano, dadosFicheiro, linhas);
+                        break;
+
+                    default:
+                        break;
+
+                }
             default:
-            break;
+                break;
+        }
     }
-    }
-    public static void previsaoMMS (int dia,int mes, int ano, int upperLimit, int lowerLimit, int[][] dadosFicheiro, int linhas){
-       Scanner ler = new Scanner(System.in);
-       double prev=0.0, resultado;
-       System.out.println("Introduza a ordem da Média Móvel");
-       int n = ler.nextInt(); 
-       for(int i=0; i<linhas;i++){
-           for(int k=0;k<n&&k<=i;k++){
-            if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3]>=lowerLimit && dadosFicheiro[linhas][3]<=upperLimit ){
-                prev = (dadosFicheiro[i - k][4]) + prev;
+
+    public static void previsaoMMS(int dia, int mes, int ano, int upperLimit, int lowerLimit, int[][] dadosFicheiro, int linhas) {
+        Scanner ler = new Scanner(System.in);
+        double prev = 0.0, resultado;
+        System.out.println("Introduza a ordem da Média Móvel");
+        int n = ler.nextInt();
+        for (int i = 0; i < linhas; i++) {
+            for (int k = 0; k < n && k <= i; k++) {
+                if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3] >= lowerLimit && dadosFicheiro[linhas][3] <= upperLimit) {
+                    prev = (dadosFicheiro[i - k][4]) + prev;
+                }
             }
         }
-            }
-        resultado = prev/n; 
+        resultado = prev / n;
     }
-    public static void previsaoMMSDIA (int dia, int mes, int ano, int[][] dadosFicheiro, int linhas){ 
-       Scanner ler = new Scanner(System.in);
-       double prev=0.0, resultado;
-       System.out.println("Introduza a ordem da Média Móvel");
-       int n = ler.nextInt(); 
-       for(int i=0; i<linhas;i++){
-           for(int k=0;k<n&&k<=i;k++){
-            if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia ){
-                prev = (dadosFicheiro[i - k][4]) + prev;
+
+    public static void previsaoMMSDIA(int dia, int mes, int ano, int[][] dadosFicheiro, int linhas) {
+        Scanner ler = new Scanner(System.in);
+        double prev = 0.0, resultado;
+        System.out.println("Introduza a ordem da Média Móvel");
+        int n = ler.nextInt();
+        for (int i = 0; i < linhas; i++) {
+            for (int k = 0; k < n && k <= i; k++) {
+                if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia) {
+                    prev = (dadosFicheiro[i - k][4]) + prev;
+                }
             }
         }
-           }
-        resultado = prev/n;
+        resultado = prev / n;
     }
-    public static void previsaoMMSMES (int mes, int ano,int[][] dadosFicheiro, int linhas){ 
+
+    public static void previsaoMMSMES(int mes, int ano, int[][] dadosFicheiro, int linhas) {
         int n;
         Scanner ler = new Scanner(System.in);
         System.out.println("Introduza a ordem da média móvel");
         n = ler.nextInt();
-        double prev=0, resultado;
-        for(int i=0; i<linhas;i++){
-           for(int k=0;k<n&&k<=i;k++){
-            if(dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes){
-                 prev = (dadosFicheiro[i - k][4]) + prev;
+        double prev = 0, resultado;
+        for (int i = 0; i < linhas; i++) {
+            for (int k = 0; k < n && k <= i; k++) {
+                if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes) {
+                    prev = (dadosFicheiro[i - k][4]) + prev;
+                }
             }
         }
-            }     
-        resultado = prev/n;
+        resultado = prev / n;
     }
-    
+
     //----------------------------------------------------------------------------------------------
-    public static void previsaoMMEP (int dia,int mes, int ano, int upperLimit, int lowerLimit, int[][] dadosFicheiro, int linhas){
-        double prev=0, a;
+    public static void previsaoMMEP(int dia, int mes, int ano, int upperLimit, int lowerLimit, int[][] dadosFicheiro, int linhas) {
+        double prev = 0, a;
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de α (]0,1[)");
         do {
             a = ordem.nextDouble();
         } while (a <= 0 || a >= 1);
         for (int i = 0; i < linhas; i++) {
-            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3]>=lowerLimit && dadosFicheiro[linhas][3]<=upperLimit ) {
+            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3] >= lowerLimit && dadosFicheiro[linhas][3] <= upperLimit) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
-                
+
             }
         }
     }
-    public static void previsaoMMEPDIA(int dia, int mes, int ano, int[][] dadosFicheiro, int linhas){
-        double prev=0, a;
+
+    public static void previsaoMMEPDIA(int dia, int mes, int ano, int[][] dadosFicheiro, int linhas) {
+        double prev = 0, a;
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de α (]0,1[)");
         do {
             a = ordem.nextDouble();
         } while (a <= 0 || a >= 1);
         for (int i = 0; i < linhas; i++) {
-            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia ) {
+            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
-                
+
             }
         }
     }
-    public static void previsaoMMEPMES(int mes, int ano, int[][] dadosFicheiro, int linhas){
-        double prev=0, a;
+
+    public static void previsaoMMEPMES(int mes, int ano, int[][] dadosFicheiro, int linhas) {
+        double prev = 0, a;
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de α (]0,1[)");
         do {
@@ -707,10 +824,41 @@ public class ProjetoV1 {
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
-                
+
             }
         }
     }
-       
+    public static int lerFicheiroCSV (int[][] dadosFicheiro) throws FileNotFoundException{
+     AnularMemoriaArr(dadosFicheiro);
+     int colunas = 0;
+     String filename;
+     Scanner ler = new Scanner(System.in);
+     System.out.println("Introduza o nome do ficheiro: ");
+     filename=ler.nextLine();
+     Scanner input = new Scanner(new File(filename));
+
+     String lixo = input.nextLine();
+     while(input.hasNext()){
+         String linha = input.nextLine();
+         String[] separador;
+         separador = linha.split(",");
+         dadosFicheiro[colunas][0]= Integer.valueOf(separador[0]);
+         dadosFicheiro[colunas][1]= Integer.valueOf(separador[1]);
+         dadosFicheiro[colunas][2]= Integer.valueOf(separador[2]);
+         dadosFicheiro[colunas][3]= Integer.valueOf(separador[3]);
+         colunas++;
+     }
+     for(int i=0; i<5; i++){
+         for(int j=0; j<4; j++){
+             System.out.println(dadosFicheiro[i][j]);
+         }
+     }
+     input.close();
+        return colunas;
+
 }
+    public static void AnularMemoriaArr (int[][] dadosFicheiro){
+      dadosFicheiro=null;
+    }
+    }
 
