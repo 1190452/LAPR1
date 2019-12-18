@@ -1,0 +1,19 @@
+------------------------------------------------------------------------------------------------
+Linhas 14-21:
+        File f = new File(args[0]);
+        if (f.exists()){
+            System.out.println("Ficheiro verificado com sucesso, escolha a funcionalidade!");
+        }
+        if (!f.exists()){
+                        System.out.println("Ficheiro não existe, a sair!");
+        System.exit(0); 
+    }
+------------------------------------------------------------------------------------------------
+Linha 49:
+                    linhas = guardarDados(dadosFicheiro, f);
+------------------------------------------------------------------------------------------------
+Linha 73-75:
+    public static int guardarDados(int[][] dadosFicheiro, File f) throws FileNotFoundException {
+        int qtdlinhas = 0;
+        Scanner lerFicheiro = new Scanner (f);
+------------------------------------------------------------------------------------------------
