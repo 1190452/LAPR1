@@ -5,6 +5,11 @@
  */
 package projetov1;
 
+import com.panayotis.gnuplot.JavaPlot;
+import com.panayotis.gnuplot.plot.DataSetPlot;
+import com.panayotis.gnuplot.style.NamedPlotColor;
+import com.panayotis.gnuplot.style.PlotStyle;
+import com.panayotis.gnuplot.style.Style;
 import java.io.FileNotFoundException;
 import java.io.File;
 import java.util.Scanner;
@@ -160,9 +165,7 @@ public class ProjetoV1 {
                 break;
         }
         return null;
-
     }
-
     public static int[] analisarDia(int[][] dadosFicheiro, int linhas) {
         int p = 0;
         int soma = dadosFicheiro[0][4];
@@ -175,21 +178,15 @@ public class ProjetoV1 {
                 soma = dadosFicheiro[posicao + 1][4];
                 p++;
             }
-
         }
         int x = 0;
         while (energiasD[x] != 0) {
             System.out.println(energiasD[x]);
             x++;
         }
-
-        //  visualizarGraf(energiasD);
+        visualizarGraficoAnalise(energiasD);
         return energiasD;
     }
-
-    /*public static void visualizarGraf(int [] energiasD){
-        
-    }*/
     public static int[] analisarMes(int[][] dadosFicheiro, int linhas) {
         int p = 0;
         int soma = dadosFicheiro[0][4];
@@ -208,15 +205,9 @@ public class ProjetoV1 {
             System.out.println(energiasM[x]);
             x++;
         }
-
+        visualizarGraficoAnalise(energiasM);
         return energiasM;
-        //  verGrafico(energiasM);
-
     }
-
-    /* public static void verGrafico(int [] energiasM){
-        
-    }*/
     public static int[] analisarAno(int[][] dadosFicheiro, int linhas) {
         int p = 0;
         int soma = dadosFicheiro[0][4];
@@ -235,13 +226,9 @@ public class ProjetoV1 {
             System.out.println(energiasA[x]);
             x++;
         }
+        visualizarGraficoAnalise(energiasA);
         return energiasA;
-        // mostrarGraf(energiasA);
     }
-
-    /* public static void mostrarGraf (int [] energiasA){
-        
-    }*/
     public static int[] analisarPeriodo(int[][] dadosFicheiro, int lowerLimit, int upperLimit, int linhas) {
         int p = 0;
         int soma = 0;
@@ -262,9 +249,31 @@ public class ProjetoV1 {
             System.out.println(energiasP[x]);
             x++;
         }
+        visualizarGraficoAnalise(energiasP);
         return energiasP;
     }
-
+    public static void visualizarGraficoAnalise (int [] array){
+        JavaPlot p = new JavaPlot();
+        PlotStyle myPlotStyle = new PlotStyle();
+        myPlotStyle.setStyle(Style.DOTS);
+        myPlotStyle.setLineWidth(5);        
+        myPlotStyle.setLineType(NamedPlotColor.BLUE);
+        myPlotStyle.setLineType(2);
+        int tab[][];
+        tab = new int[22700][1];
+        passarDados(tab, array);
+        DataSetPlot s = new DataSetPlot(tab);
+        s.setTitle("Análise Exemplo");
+        s.setPlotStyle(myPlotStyle);
+        p.addPlot(s);
+        p.newGraph();
+        p.plot();
+    }
+    public static void passarDados (int [][] tab, int [] array ) {
+        for(int i=0; i<array.length; i++){
+            tab[i][0]=array[i];
+        }
+    }
     public static double mediaGlobal(int[] serieTemp, int linhas) {
         int somaFinal = 0;
         double media;
@@ -274,13 +283,11 @@ public class ProjetoV1 {
         media = somaFinal / linhas;
         return media;
     }
-
     public static void definirIntervalos(double mgs, int[] serieTemp) {
         double mediaInferior = mgs - (0.2 * mgs);
         double mediaSuperior = mgs + (0.2 * mgs);
         numeroObservacoes(serieTemp, mediaInferior, mediaSuperior);
     }
-
     public static void numeroObservacoes(int[] serieTemp, double mediaInferior, double mediaSuperior) {
         int contadorInf = 0, contadorSup = 0, contadorMeio = 0, contador;
         for (int posicao = 0; posicao < serieTemp.length; posicao++) {
@@ -292,48 +299,32 @@ public class ProjetoV1 {
                 contadorSup++;
             }
         }
-        // visualizarGráfico(contadorInf, contadorMeio, contadorSup, mediaInferior, mediaSuperior);
+         visualizarGraficoIntervalos(contadorInf, contadorMeio, contadorSup, mediaInferior, mediaSuperior);
     }
-
-    /*public static void visualizarGráfico(int contadorInf, int contadorMeio, int contadorSup, double mediaInferior, double mediaSuperior) {
+    public static void visualizarGraficoIntervalos(int contadorInf, int contadorMeio, int contadorSup, double mediaInferior, double mediaSuperior) {
         JavaPlot p = new JavaPlot();
         PlotStyle myPlotStyle = new PlotStyle();
         myPlotStyle.setStyle(Style.HISTOGRAMS);
-        myPlotStyle.setLineWidth(5);
-        myPlotStyle.setLineType(NamedPlotColor.PINK);
+        myPlotStyle.setLineWidth(5);        
+        myPlotStyle.setLineType(NamedPlotColor.BLUE);
         myPlotStyle.setLineType(2);
-        /* 
-        set samples 16;
-        set style data boxes;
-        set boxwidth 0.2 absolute;
-        set style fill solid noborder;
-
-        poisson(x) = lambda*x/int(x)!exp(-lambda);
-        plot for [lambda=1:5:2] "+" using ($0-(lambda-3)*0.1):(poisson($0)) title sprintf("λ = %d", lambda);
-     */
- /*  double tab[][];
-        tab = new double[3][2];
-        tab[0][0] = mediaInferior;
-        tab[0][1] = contadorInf;
-        tab[1][0] = 5;
-        tab[1][1] = mediaInferior;
-        tab[2][0] = mediaSuperior;
-        tab[2][1] = contadorSup;
-
+        double tab[][];
+        tab = new double[3][1];
+        tab[0][0] = contadorInf;
+        tab[1][0] = contadorMeio;
+        tab[2][0] = contadorSup;
         DataSetPlot s = new DataSetPlot(tab);
-        s.setTitle("Teste");
+        s.setTitle("Histograma exemplo");
+        s.setPlotStyle(myPlotStyle);
         p.addPlot(s);
-
         p.newGraph();
         p.plot();
     }
-     */
     public static void ordenarValores(int[] energia, int linhas) {
         Scanner utilizador = new Scanner(System.in);
         System.out.println("Pretende ordenar os valores de forma crescente ou decrescente?");
         String decisao = utilizador.nextLine();
         if (decisao.equalsIgnoreCase("crescente") || decisao.equalsIgnoreCase("decrescente")) {
-
             if (decisao.equalsIgnoreCase("crescente")) {
                 int start = 0, end = linhas - 1;
                 mergeSortCrescente(energia, start, end);
@@ -341,18 +332,14 @@ public class ProjetoV1 {
             } else if (decisao.equalsIgnoreCase("decrescente")) {
                 int start = 0, end = linhas - 1;
                 mergeSortDecrescente(energia, start, end);
-
             }
-
             for (int z = 0; z < linhas; z++) {
                 if (energia[z] != 0) {
                     System.out.println(energia[z]);
                 }
-
             }
         }
     }
-
     public static void merge(int[] energias, int start, int mid, int end) {
         int temp[] = new int[end - start + 1];
         int i = start, j = mid + 1, k = 0;
@@ -382,7 +369,6 @@ public class ProjetoV1 {
         }
 
     }
-
     public static void mergeSortCrescente(int[] energias, int start, int end) {
 
         if (start < end) {
@@ -393,7 +379,6 @@ public class ProjetoV1 {
         }
 
     }
-
     public static void mergeDecrescente(int[] energias, int start, int mid, int end) {
         int temp[] = new int[end - start + 1];
         int i = start, j = mid + 1, k = 0;
@@ -423,7 +408,6 @@ public class ProjetoV1 {
         }
 
     }
-
     public static void mergeSortDecrescente(int[] energias, int start, int end) {
 
         if (start < end) {
@@ -433,24 +417,30 @@ public class ProjetoV1 {
             mergeDecrescente(energias, start, mid, end);
         }
     }
-
     public static void EscolhaFiltragem(int[][] dadosFicheiro, int linhas) {
         System.out.println("Suavização/Filtragem da série orginal");
         Scanner ler = new Scanner(System.in);
         System.out.println("Introduza a resolução temporal: ");
         String time = ler.nextLine();
+        int [] [] auxiliar = new int [25000][1];
         switch (time.toLowerCase()) {
             case "diario":
-                int[] energiaD = analisarDia(dadosFicheiro, linhas);
-                EscolhaMedia(energiaD, linhas);
+                int[] energiaD2 = analisarDia(dadosFicheiro, linhas);
+                passarDados2(energiaD2, auxiliar);
+                EscolhaMedia(energiaD2, linhas);
+                verGrafico(energiaD2);
                 break;
             case "mensal":
-                int[] energiaM = analisarMes(dadosFicheiro, linhas);
-                EscolhaMedia(energiaM, linhas);
+                int[] energiaM2 = analisarMes(dadosFicheiro, linhas);
+                passarDados2(energiaM2, auxiliar);
+                EscolhaMedia(energiaM2, linhas);
+                verGrafico(energiaM2);
                 break;
             case "anual":
                 int[] energiaA2 = analisarAno(dadosFicheiro, linhas);
+                passarDados2(energiaA2, auxiliar);
                 EscolhaMedia(energiaA2, linhas);
+                verGrafico(energiaA2);
                 break;
             case "periodo do dia":
                 System.out.println("Introduza o periodo do dia que pretende analisar!");
@@ -462,31 +452,42 @@ public class ProjetoV1 {
                         lowerLimit = 00;
                         upperLimit = 05;
                         int[] energiasMadrugada2 = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        passarDados2(energiasMadrugada2, auxiliar);
                         EscolhaMedia(energiasMadrugada2, linhas);
+                        verGrafico(energiasMadrugada2);
                         break;
                     case "manha":
                         lowerLimit = 06;
                         upperLimit = 11;
                         int[] energiasManha2 = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        passarDados2(energiasManha2, auxiliar);
                         EscolhaMedia(energiasManha2, linhas);
+                        verGrafico(energiasManha2);
                         break;
                     case "tarde":
                         lowerLimit = 12;
                         upperLimit = 17;
                         int[] energiasTarde2 = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        passarDados2(energiasTarde2, auxiliar);
                         EscolhaMedia(energiasTarde2, linhas);
+                        verGrafico(energiasTarde2);
                         break;
                     case "noite":
                         lowerLimit = 18;
                         upperLimit = 23;
                         int[] energiasNoite2 = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                        passarDados2(energiasNoite2, auxiliar);
                         EscolhaMedia(energiasNoite2, linhas);
-                        break;
-                        
+                        verGrafico(energiasNoite2);
+                        break;                
                 }
         }
     }
-
+    public static void passarDados2(int [] mediador, int[][] auxiliar){
+        for(int p=0;p<mediador.length;p++){
+            auxiliar[p][0] = mediador[p];
+        }
+    }
     public static void EscolhaMedia(int[] energia, int linhas) {
         Scanner ler = new Scanner(System.in);
         System.out.println("Introduza o tipo de média a utilizar (Média Móvel Simples |OU| Média Móvel Exponencialmente Pesada): ");
@@ -507,17 +508,16 @@ public class ProjetoV1 {
         }
 
     }
-
     public static double[] mediaPesada(int[] energia, int linhas) {
         Scanner ordem = new Scanner(System.in);
-        System.out.println("Introduza o valor de α (]0,1[)");
+        System.out.println("Introduza o valor de α (]0,1])");
         double mmep[] = new double[linhas];
         int x = 0;
         double a;
         mmep[0]=energia[0];
         do {
             a = ordem.nextDouble();
-        } while (a <= 0 || a >= 1);
+        } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
             if ((x - 1) >= 0) {
                 mmep[x] = a * energia[i] + (1 - a) * mmep[x - 1];
@@ -529,7 +529,6 @@ public class ProjetoV1 {
         }
         return mmep;
     }
-
     public static double[] MediaMovelSimples(int[] energia, int linhas) {
         Scanner ordem = new Scanner(System.in);
         System.out.println("Introduza o valor de n");
@@ -548,7 +547,6 @@ public class ProjetoV1 {
         }
         return mms;
     }
-
     public static void ErroMediaAbsoluto(int[] serieTemp, int linhas, double[] media) {
         double erro = 0, error;
         System.out.println("Erro Médio Absoluto");
@@ -558,7 +556,25 @@ public class ProjetoV1 {
         error = erro / linhas;
         System.out.println(error);
     }
-
+    public static void verGrafico (int [] array2){
+        JavaPlot p = new JavaPlot();
+        PlotStyle myPlotStyle = new PlotStyle();
+        myPlotStyle.setStyle(Style.HISTOGRAMS);
+        myPlotStyle.setLineWidth(5);        
+        myPlotStyle.setLineType(NamedPlotColor.BLUE);
+        myPlotStyle.setLineType(2);
+        double tab[][];
+        tab = new double[3][1];
+        tab[0][0] = 1;
+        tab[1][0] = 2;
+        tab[2][0] = 1;
+        DataSetPlot s = new DataSetPlot(tab);
+        s.setTitle("Histograma exemplo");
+        s.setPlotStyle(myPlotStyle);
+        p.addPlot(s);
+        p.newGraph();
+        p.plot();
+    }
     public static void Previsao(int[][] dadosFicheiro, int linhas) {
         Scanner ler = new Scanner(System.in);
         String escolha, modelo, periodo;
@@ -736,7 +752,6 @@ public class ProjetoV1 {
                 break;
         }
     }
-
     public static void previsaoMMS(int dia, int mes, int ano, int upperLimit, int lowerLimit, int[][] dadosFicheiro, int linhas) {
         Scanner ler = new Scanner(System.in);
         double prev = 0.0, resultado;
@@ -751,7 +766,6 @@ public class ProjetoV1 {
         }
         resultado = prev / n;
     }
-
     public static void previsaoMMSDIA(int dia, int mes, int ano, int[][] dadosFicheiro, int linhas) {
         Scanner ler = new Scanner(System.in);
         double prev = 0.0, resultado;
@@ -766,7 +780,6 @@ public class ProjetoV1 {
         }
         resultado = prev / n;
     }
-
     public static void previsaoMMSMES(int mes, int ano, int[][] dadosFicheiro, int linhas) {
         int n;
         Scanner ler = new Scanner(System.in);
@@ -782,15 +795,13 @@ public class ProjetoV1 {
         }
         resultado = prev / n;
     }
-
-    //----------------------------------------------------------------------------------------------
     public static void previsaoMMEP(int dia, int mes, int ano, int upperLimit, int lowerLimit, int[][] dadosFicheiro, int linhas) {
         double prev = 0, a;
         Scanner ordem = new Scanner(System.in);
-        System.out.println("Introduza o valor de α (]0,1[)");
+        System.out.println("Introduza o valor de α (]0,1])");
         do {
             a = ordem.nextDouble();
-        } while (a <= 0 || a >= 1);
+        } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3] >= lowerLimit && dadosFicheiro[linhas][3] <= upperLimit) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
@@ -798,14 +809,13 @@ public class ProjetoV1 {
             }
         }
     }
-
     public static void previsaoMMEPDIA(int dia, int mes, int ano, int[][] dadosFicheiro, int linhas) {
         double prev = 0, a;
         Scanner ordem = new Scanner(System.in);
-        System.out.println("Introduza o valor de α (]0,1[)");
+        System.out.println("Introduza o valor de α (]0,1])");
         do {
             a = ordem.nextDouble();
-        } while (a <= 0 || a >= 1);
+        } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
@@ -813,14 +823,13 @@ public class ProjetoV1 {
             }
         }
     }
-
     public static void previsaoMMEPMES(int mes, int ano, int[][] dadosFicheiro, int linhas) {
         double prev = 0, a;
         Scanner ordem = new Scanner(System.in);
-        System.out.println("Introduza o valor de α (]0,1[)");
+        System.out.println("Introduza o valor de α (]0,1])");
         do {
             a = ordem.nextDouble();
-        } while (a <= 0 || a >= 1);
+        } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
