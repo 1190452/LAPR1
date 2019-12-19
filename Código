@@ -19,10 +19,7 @@ import java.util.Scanner;
 public class ProjetoV1 {
 
     public static void main(String[] args) throws FileNotFoundException, IOException {
-        int[][] dadosFicheiro = new int[22681][5];
-        int linhas=0;
-        int[] serieTemp=null;
-        Scanner ler=new Scanner(System.in);
+        menu();
         /*
         File f = new File(args[0]);
         if (f.exists()){
@@ -33,6 +30,13 @@ public class ProjetoV1 {
         System.exit(0); 
         }
         */
+    }
+    public static void menu() throws FileNotFoundException, IOException {
+        int[][] dadosFicheiro = new int[22681][5];
+        int linhas=0;
+        int[] serieTemp=null;
+        Scanner ler=new Scanner(System.in);
+ 
         System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
         System.out.println("|  Função   |                              Descrição                                 |                                  Funcionalidades                                              |");
         System.out.println("|-----------|------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|");
