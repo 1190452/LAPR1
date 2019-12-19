@@ -112,7 +112,7 @@ public class ProjetoV1 {
     public static int[] analisarDados(int[][] dadosFicheiro, int linhas) throws IOException {
         System.out.println("ANÁLISE");
         Scanner ler = new Scanner(System.in);
-        System.out.println("Introduza a resolução temporal(periodo do dia, dia, mes, ano): ");
+        System.out.println("Introduza a resolução temporal(diario, mensal, anual, periodo do dia): ");
         String time = ler.nextLine();
         switch (time.toLowerCase()) {
             case "diario":
@@ -427,7 +427,7 @@ public class ProjetoV1 {
     public static void EscolhaFiltragem(int[][] dadosFicheiro, int linhas) throws IOException {
         System.out.println("Suavização/Filtragem da série orginal");
         Scanner ler = new Scanner(System.in);
-        System.out.println("Introduza a resolução temporal: ");
+        System.out.println("Introduza a resolução temporal(diario, mensal, anual, periodo do dia): ");
         String time = ler.nextLine();
         int [] [] auxiliar = new int [25000][1];
         switch (time.toLowerCase()) {
@@ -450,7 +450,7 @@ public class ProjetoV1 {
                 verGrafico(energiaA2);
                 break;
             case "periodo do dia":
-                System.out.println("Introduza o periodo do dia que pretende analisar!");
+                System.out.println("Introduza o periodo do dia que pretende analisar(madrugada, manha, tarde, noite)!");
                 String periodo = ler.nextLine();
                 int lowerLimit,
                  upperLimit;
@@ -676,7 +676,7 @@ public class ProjetoV1 {
                 }
                 break;
             case "media movel exponencialmente pesada":
-                System.out.println("Introduza a resolução temporal que pretende analisar(periodo do dia, dia, mes)");
+                System.out.println("Introduza o espaço temporal que pretende analisar(periodo do dia, dia, mes)");
                 escolha = ler.nextLine();
 
                 switch (escolha.toLowerCase()) {
@@ -733,7 +733,7 @@ public class ProjetoV1 {
                                 break;
 
                         }
-
+                        break;
                     case "dia":
                         System.out.println("Introduza o dia que pretende analisar");
                         dia = ler.nextInt();
@@ -826,7 +826,7 @@ public class ProjetoV1 {
         } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes && dadosFicheiro[i][2] == dia-1 && dadosFicheiro[linhas][3] >= lowerLimit && dadosFicheiro[linhas][3] <= upperLimit) {
-                prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
+                prev = (a * dadosFicheiro[i][4] + (1 - a) * (prev - 1))+prev;
 
             }
         }
@@ -845,7 +845,7 @@ public class ProjetoV1 {
         } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes && dadosFicheiro[i][2] == dia-1) {
-                prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
+                prev =(a * dadosFicheiro[i][4] + (1 - a) * (prev - 1))+prev;
 
             }
         }
@@ -864,7 +864,7 @@ public class ProjetoV1 {
         } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
             if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes-1) {
-                prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
+                prev = (a * dadosFicheiro[i][4] + (1 - a) * (prev - 1))+prev;
 
             }
         }
