@@ -12,11 +12,13 @@ import com.panayotis.gnuplot.style.PlotStyle;
 import com.panayotis.gnuplot.style.Style;
 import java.io.FileNotFoundException;
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
+
 
 public class ProjetoV1 {
 
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         int[][] dadosFicheiro = new int[22681][5];
         int linhas=0;
         int[] serieTemp=null;
@@ -103,10 +105,10 @@ public class ProjetoV1 {
         return qtdlinhas;
     }
 
-    public static int[] analisarDados(int[][] dadosFicheiro, int linhas) {
+    public static int[] analisarDados(int[][] dadosFicheiro, int linhas) throws IOException {
         System.out.println("ANÁLISE");
         Scanner ler = new Scanner(System.in);
-        System.out.println("Introduza a resolução temporal: ");
+        System.out.println("Introduza a resolução temporal(periodo do dia, dia, mes, ano): ");
         String time = ler.nextLine();
         switch (time.toLowerCase()) {
             case "diario":
@@ -125,7 +127,7 @@ public class ProjetoV1 {
                 ordenarValores(energiasA, linhas);
                 return energiasA;
             case "periodo do dia":
-                System.out.println("Introduza o periodo do dia que pretende analisar!");
+                System.out.println("Introduza o periodo do dia que pretende analisar(madrugada, manha, tarde, noite)!");
                 String periodo = ler.nextLine();
                 int lowerLimit,
                  upperLimit;
@@ -166,7 +168,7 @@ public class ProjetoV1 {
         }
         return null;
     }
-    public static int[] analisarDia(int[][] dadosFicheiro, int linhas) {
+    public static int[] analisarDia(int[][] dadosFicheiro, int linhas) throws IOException {
         int p = 0;
         int soma = dadosFicheiro[0][4];
         int[] energiasD = new int[linhas];
@@ -187,7 +189,7 @@ public class ProjetoV1 {
         visualizarGraficoAnalise(energiasD);
         return energiasD;
     }
-    public static int[] analisarMes(int[][] dadosFicheiro, int linhas) {
+    public static int[] analisarMes(int[][] dadosFicheiro, int linhas) throws IOException {
         int p = 0;
         int soma = dadosFicheiro[0][4];
         int[] energiasM = new int[linhas];
@@ -208,7 +210,7 @@ public class ProjetoV1 {
         visualizarGraficoAnalise(energiasM);
         return energiasM;
     }
-    public static int[] analisarAno(int[][] dadosFicheiro, int linhas) {
+    public static int[] analisarAno(int[][] dadosFicheiro, int linhas) throws IOException {
         int p = 0;
         int soma = dadosFicheiro[0][4];
         int[] energiasA = new int[linhas];
@@ -229,7 +231,7 @@ public class ProjetoV1 {
         visualizarGraficoAnalise(energiasA);
         return energiasA;
     }
-    public static int[] analisarPeriodo(int[][] dadosFicheiro, int lowerLimit, int upperLimit, int linhas) {
+    public static int[] analisarPeriodo(int[][] dadosFicheiro, int lowerLimit, int upperLimit, int linhas) throws IOException {
         int p = 0;
         int soma = 0;
         int[] energiasP = new int[linhas];
@@ -252,7 +254,8 @@ public class ProjetoV1 {
         visualizarGraficoAnalise(energiasP);
         return energiasP;
     }
-    public static void visualizarGraficoAnalise (int [] array){
+    public static void visualizarGraficoAnalise (int [] array) throws FileNotFoundException, IOException{
+   
         JavaPlot p = new JavaPlot();
         PlotStyle myPlotStyle = new PlotStyle();
         myPlotStyle.setStyle(Style.DOTS);
@@ -267,7 +270,7 @@ public class ProjetoV1 {
         s.setPlotStyle(myPlotStyle);
         p.addPlot(s);
         p.newGraph();
-        p.plot();
+                
     }
     public static void passarDados (int [][] tab, int [] array ) {
         for(int i=0; i<array.length; i++){
@@ -417,7 +420,7 @@ public class ProjetoV1 {
             mergeDecrescente(energias, start, mid, end);
         }
     }
-    public static void EscolhaFiltragem(int[][] dadosFicheiro, int linhas) {
+    public static void EscolhaFiltragem(int[][] dadosFicheiro, int linhas) throws IOException {
         System.out.println("Suavização/Filtragem da série orginal");
         Scanner ler = new Scanner(System.in);
         System.out.println("Introduza a resolução temporal: ");
@@ -669,7 +672,7 @@ public class ProjetoV1 {
                 }
                 break;
             case "media movel exponencialmente pesada":
-                System.out.println("Introduza o espaço temporal que pretende analisar");
+                System.out.println("Introduza a resolução temporal que pretende analisar(periodo do dia, dia, mes)");
                 escolha = ler.nextLine();
 
                 switch (escolha.toLowerCase()) {
@@ -759,12 +762,17 @@ public class ProjetoV1 {
         int n = ler.nextInt();
         for (int i = 0; i < linhas; i++) {
             for (int k = 0; k < n && k <= i; k++) {
-                if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3] >= lowerLimit && dadosFicheiro[linhas][3] <= upperLimit) {
+                if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes && dadosFicheiro[i][2] == dia-1 && dadosFicheiro[i][3] >= lowerLimit && dadosFicheiro[i][3] <= upperLimit) {
                     prev = (dadosFicheiro[i - k][4]) + prev;
                 }
             }
         }
+        if (prev==0){
+            System.out.println("Não existe momento anterior ao introduzido pelo utilizador!");
+        }else{
         resultado = prev / n;
+        System.out.println(resultado);
+    }
     }
     public static void previsaoMMSDIA(int dia, int mes, int ano, int[][] dadosFicheiro, int linhas) {
         Scanner ler = new Scanner(System.in);
@@ -773,12 +781,17 @@ public class ProjetoV1 {
         int n = ler.nextInt();
         for (int i = 0; i < linhas; i++) {
             for (int k = 0; k < n && k <= i; k++) {
-                if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia) {
-                    prev = (dadosFicheiro[i - k][4]) + prev;
+                if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes && dadosFicheiro[i][2]==dia-1) {
+                    prev = (double)(dadosFicheiro[i - k][4]) + prev;
                 }
             }
         }
+        if (prev==0){
+            System.out.println("Não existe momento anterior ao introduzido pelo utilizador!");
+        }else{
         resultado = prev / n;
+        System.out.println(resultado);
+        }
     }
     public static void previsaoMMSMES(int mes, int ano, int[][] dadosFicheiro, int linhas) {
         int n;
@@ -788,12 +801,17 @@ public class ProjetoV1 {
         double prev = 0, resultado;
         for (int i = 0; i < linhas; i++) {
             for (int k = 0; k < n && k <= i; k++) {
-                if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes) {
+                if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes-1) {
                     prev = (dadosFicheiro[i - k][4]) + prev;
                 }
             }
         }
+        if (prev==0){
+            System.out.println("Não existe momento anterior ao introduzido pelo utilizador!");
+        }else{
         resultado = prev / n;
+        System.out.println(resultado);
+        }
     }
     public static void previsaoMMEP(int dia, int mes, int ano, int upperLimit, int lowerLimit, int[][] dadosFicheiro, int linhas) {
         double prev = 0, a;
@@ -803,10 +821,15 @@ public class ProjetoV1 {
             a = ordem.nextDouble();
         } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
-            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] <= mes && dadosFicheiro[linhas][2] < dia && dadosFicheiro[linhas][3] >= lowerLimit && dadosFicheiro[linhas][3] <= upperLimit) {
+            if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes && dadosFicheiro[i][2] == dia-1 && dadosFicheiro[linhas][3] >= lowerLimit && dadosFicheiro[linhas][3] <= upperLimit) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
 
             }
+        }
+        if (prev==0){
+            System.out.println("Não existe momento anterior ao introduzido pelo utilizador!");
+        }else{
+            System.out.println(prev);
         }
     }
     public static void previsaoMMEPDIA(int dia, int mes, int ano, int[][] dadosFicheiro, int linhas) {
@@ -817,10 +840,15 @@ public class ProjetoV1 {
             a = ordem.nextDouble();
         } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
-            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] == mes && dadosFicheiro[linhas][2] < dia) {
+            if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes && dadosFicheiro[i][2] == dia-1) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
 
             }
+        }
+        if (prev==0){
+            System.out.println("Não existe momento anterior ao introduzido pelo utilizador!");
+        }else{
+            System.out.println(prev);
         }
     }
     public static void previsaoMMEPMES(int mes, int ano, int[][] dadosFicheiro, int linhas) {
@@ -831,10 +859,15 @@ public class ProjetoV1 {
             a = ordem.nextDouble();
         } while (a <= 0 || a > 1);
         for (int i = 0; i < linhas; i++) {
-            if (dadosFicheiro[linhas][0] == ano && dadosFicheiro[linhas][1] < mes) {
+            if (dadosFicheiro[i][0] == ano && dadosFicheiro[i][1] == mes-1) {
                 prev = a * dadosFicheiro[i][4] + (1 - a) * (prev - 1);
 
             }
+        }
+        if (prev==0){
+            System.out.println("Não existe momento anterior ao introduzido pelo utilizador!");
+        }else{
+            System.out.println(prev);
         }
     }
     public static int lerFicheiroCSV (int[][] dadosFicheiro) throws FileNotFoundException{
