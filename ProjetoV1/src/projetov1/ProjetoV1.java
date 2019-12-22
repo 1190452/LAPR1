@@ -300,6 +300,7 @@ public class ProjetoV1 {
 
     }
 
+    //analisar dados
     public static int[] analisarDados(int[][] dadosFicheiro, int linhas, String time, String tipoOrdenacao) {
 
         if (dadosFicheiro == null) {
