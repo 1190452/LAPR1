@@ -1,0 +1,34 @@
+//Ativação métodos
+
+ AnularMemoriaArr(dadosFicheiro);
+ int colunas = lerFicheiroCSV(dadosFicheiro);
+ 
+ 
+ //Métodos
+ 
+ public static void AnularMemoriaArr (int[][] dadosFicheiro){
+                dadosFicheiro=null;
+    }
+
+    public static int lerFicheiroCSV (int[][] dadosFicheiro) throws FileNotFoundException{
+     int linhas = 0;
+     Scanner ler = new Scanner(System.in);
+     String filename;
+     System.out.println("Introduza nome do ficheiro");
+     filename = ler.nextLine();
+     Scanner input = new Scanner(new File(filename));
+     
+     String lixo = input.nextLine();
+     while(input.hasNext()){
+         String linha = input.nextLine();
+         String[] separador;
+         separador = linha.split(",");
+         dadosFicheiro[linhas][0]= Integer.valueOf(separador[0]);
+         dadosFicheiro[linhas][1]= Integer.valueOf(separador[1]);
+         dadosFicheiro[linhas][2]= Integer.valueOf(separador[2]);
+         dadosFicheiro[linhas][3]= Integer.valueOf(separador[3]);
+         linhas++;
+     }
+     input.close();
+     return linhas;
+    }
