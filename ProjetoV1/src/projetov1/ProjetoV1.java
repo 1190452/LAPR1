@@ -23,7 +23,7 @@ import javax.imageio.ImageIO;
 public class ProjetoV1 {
 
     static boolean haInteracao = true;
-    static int[][] dadosFicheiro ;
+    static int[][] dadosFicheiro;
 
     public static void main(String[] args) {
         String resolucaoTemporal = "";
@@ -96,7 +96,7 @@ public class ProjetoV1 {
                     break;
 
                 case "-momentoPrevisao":
-                    
+
                     haInteracao = false;
                     try {
 
@@ -201,7 +201,7 @@ public class ProjetoV1 {
                         definirIntervalos(mgs, serieTemp);
                     } else {
                         System.out.println("Sem dados carregados para análise");
-                       
+
                     }
 
                     break;
@@ -210,7 +210,7 @@ public class ProjetoV1 {
                         EscolhaFiltragem(dadosFicheiro, linhas, resolucaoTemporal, modelo, nAlpha);
                     } else {
                         System.out.println("Sem dados para efetuar análise");
-                      
+
                     }
 
                     break;
@@ -219,7 +219,7 @@ public class ProjetoV1 {
                         Previsao(dadosFicheiro, linhas, resolucaoTemporal, modelo, nAlpha, dia, mes, ano);
                     } else {
                         System.out.println("Sem dados para efetuar análise");
-                        
+
                     }
 
                     break;
@@ -332,21 +332,24 @@ public class ProjetoV1 {
             case "mensal":
                 int[] energiasM;
                 energiasM = analisarMes(dadosFicheiro, linhas);
-                ordenarValores(energiasM, linhas, tipoOrdenacao);
 
-                try {
+                if (energiasM != null && energiasM.length > 0) {
+                    ordenarValores(energiasM, linhas, tipoOrdenacao);
+
                     guardarCSV(energiasM);
-                } catch (Exception e) {
-                    System.out.println("Não foi possivel guardar o ficheiro CSV");
                 }
 
                 return energiasM;
             case "anual":
                 int[] energiasA;
                 energiasA = analisarAno(dadosFicheiro, linhas);
-                ordenarValores(energiasA, linhas, tipoOrdenacao);
 
-                guardarCSV(energiasA);
+                if (energiasA != null && energiasA.length > 0) {
+                    ordenarValores(energiasA, linhas, tipoOrdenacao);
+
+                    guardarCSV(energiasA);
+
+                }
 
                 return energiasA;
 
@@ -359,9 +362,8 @@ public class ProjetoV1 {
 
                 if (energiasMadrugada != null && energiasMadrugada.length > 0) {
                     ordenarValores(energiasMadrugada, linhas, tipoOrdenacao);
+                    guardarCSV(energiasMadrugada);
                 }
-
-                guardarCSV(energiasMadrugada);
 
                 return energiasMadrugada;
             case "manha":
@@ -371,9 +373,11 @@ public class ProjetoV1 {
 
                 energiasManha = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
 
-                ordenarValores(energiasManha, linhas, tipoOrdenacao);
+                if (energiasManha != null && energiasManha.length > 0) {
+                    ordenarValores(energiasManha, linhas, tipoOrdenacao);
 
-                guardarCSV(energiasManha);
+                    guardarCSV(energiasManha);
+                }
 
                 return energiasManha;
             case "tarde":
@@ -382,10 +386,11 @@ public class ProjetoV1 {
                 upperLimit = 17;
 
                 energiasTarde = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                if (energiasTarde != null && energiasTarde.length > 0) {
+                    ordenarValores(energiasTarde, linhas, tipoOrdenacao);
 
-                ordenarValores(energiasTarde, linhas, tipoOrdenacao);
-
-                guardarCSV(energiasTarde);
+                    guardarCSV(energiasTarde);
+                }
 
                 return energiasTarde;
             case "noite":
@@ -394,10 +399,12 @@ public class ProjetoV1 {
                 upperLimit = 23;
 
                 energiasNoite = analisarPeriodo(dadosFicheiro, lowerLimit, upperLimit, linhas);
+                if (energiasNoite != null && energiasNoite.length > 0) {
+                    ordenarValores(energiasNoite, linhas, tipoOrdenacao);
 
-                ordenarValores(energiasNoite, linhas, tipoOrdenacao);
+                    guardarCSV(energiasNoite);
 
-                guardarCSV(energiasNoite);
+                }
 
                 return energiasNoite;
 
