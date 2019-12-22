@@ -1,1 +1,9 @@
 # Add any directories, files, or patterns you don't want to be tracked by version control
+ProjetoV1/build/built-jar.properties
+ProjetoV1/build/classes/.netbeans_automatic_build
+ProjetoV1/build/classes/.netbeans_update_resources
+ProjetoV1/build/classes/projetov1/ProjetoV1.class
+ProjetoV1/build/classes/utils/ArrayUtils.class
+ProjetoV1/build/test/classes/.netbeans_automatic_build
+ProjetoV1/build/test/classes/.netbeans_update_resources
+ProjetoV1/build/test/classes/projetov1/ProjetoV1Test.class
